@@ -1,10 +1,10 @@
-import { Vehicle, VehicleType, VehicleStatus, ChartData } from "./types";
+import { VehicleType, VehicleStatus } from "./types.js";
 
 // Centered around a mock location (e.g., Da Nang or Ho Chi Minh City coordinates approx)
 export const CENTER_LAT = 10.7769;
 export const CENTER_LNG = 106.7009;
 
-export const MOCK_VEHICLES: Vehicle[] = [
+export const MOCK_VEHICLES = [
   {
     id: "1",
     name: "Honda Vision",
@@ -114,7 +114,7 @@ export const MOCK_VEHICLES: Vehicle[] = [
   },
 ];
 
-export const REVENUE_DATA: ChartData[] = [
+export const REVENUE_DATA = [
   { name: "Mon", revenue: 4000000, bookings: 12 },
   { name: "Tue", revenue: 3000000, bookings: 8 },
   { name: "Wed", revenue: 2000000, bookings: 6 },

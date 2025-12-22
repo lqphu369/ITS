@@ -5,19 +5,19 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import { AuthProvider } from "./contexts/AuthContext";
-import { LanguageProvider } from "./contexts/LanguageContext";
-import { CartProvider } from "./contexts/CartContext";
-import { PaymentHistoryProvider } from "./contexts/PaymentHistoryContext";
-import { Navbar } from "./components/Navbar";
-import { ProtectedRoute } from "./components/ProtectedRoute";
-import { Home } from "./pages/Home";
-import { VehicleList } from "./pages/VehicleList";
-import { AdminDashboard } from "./pages/AdminDashboard";
-import { CartPage } from "./pages/CartPage";
-import { PaymentHistoryPage } from "./pages/PaymentHistoryPage";
-import { Login } from "./pages/Login";
-import { Register } from "./pages/Register";
+import { AuthProvider } from "./contexts/AuthContext.jsx";
+import { LanguageProvider } from "./contexts/LanguageContext.jsx";
+import { CartProvider } from "./contexts/CartContext.jsx";
+import { PaymentHistoryProvider } from "./contexts/PaymentHistoryContext.jsx";
+import { Navbar } from "./components/Navbar.jsx";
+import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
+import { Home } from "./pages/Home.jsx";
+import { VehicleList } from "./pages/VehicleList.jsx";
+import { AdminDashboard } from "./pages/AdminDashboard.jsx";
+import { CartPage } from "./pages/CartPage.jsx";
+import { PaymentHistoryPage } from "./pages/PaymentHistoryPage.jsx";
+import { Login } from "./pages/Login.jsx";
+import { Register } from "./pages/Register.jsx";
 
 function AppLayout() {
   return (

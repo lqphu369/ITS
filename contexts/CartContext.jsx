@@ -1,23 +1,11 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { CartItem } from "../types";
 
-interface CartContextType {
-  cartItems: CartItem[];
-  addToCart: (item: CartItem) => void;
-  removeFromCart: (itemId: string) => void;
-  clearCart: () => void;
-  getTotalPrice: () => number;
-  getTotalItems: () => number;
-}
+const CartContext = createContext(undefined);
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+export const CartProvider = ({ children }) => {
+  const [cartItems, setCartItems] = useState([]);
 
-export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-
-  const addToCart = useCallback((item: CartItem) => {
+  const addToCart = useCallback((item) => {
     setCartItems((prevItems) => {
       // Check if item already exists
       const existingIndex = prevItems.findIndex(
@@ -38,7 +26,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, []);
 
-  const removeFromCart = useCallback((itemId: string) => {
+  const removeFromCart = useCallback((itemId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   }, []);
 

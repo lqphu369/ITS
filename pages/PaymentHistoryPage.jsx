@@ -1,18 +1,18 @@
 import React from "react";
 import { History, Download } from "lucide-react";
-import { usePaymentHistory } from "../contexts/PaymentHistoryContext";
-import { useAuth } from "../contexts/AuthContext";
-import { useLanguage } from "../contexts/LanguageContext";
+import { usePaymentHistory } from "../contexts/PaymentHistoryContext.jsx";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
-export const PaymentHistoryPage: React.FC = () => {
+export const PaymentHistoryPage = () => {
   const { getPaymentHistory } = usePaymentHistory();
   const { user } = useAuth();
   const { t } = useLanguage();
 
   const userPayments = getPaymentHistory().filter((p) => p.userId === user?.id);
 
-  const getStatusBadge = (status: string) => {
-    const badges: Record<string, { bg: string; text: string }> = {
+  const getStatusBadge = (status) => {
+    const badges = {
       completed: { bg: "bg-green-100", text: "text-green-800" },
       pending: { bg: "bg-yellow-100", text: "text-yellow-800" },
       failed: { bg: "bg-red-100", text: "text-red-800" },
@@ -22,8 +22,8 @@ export const PaymentHistoryPage: React.FC = () => {
     return badge;
   };
 
-  const getStatusLabel = (status: string) => {
-    const labels: Record<string, string> = {
+  const getStatusLabel = (status) => {
+    const labels = {
       completed: "Đã hoàn thành",
       pending: "Đang chờ",
       failed: "Thất bại",

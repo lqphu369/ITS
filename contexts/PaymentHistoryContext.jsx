@@ -1,21 +1,9 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { Payment } from "../types";
 
-interface PaymentHistoryContextType {
-  payments: Payment[];
-  addPayment: (payment: Payment) => void;
-  getPaymentHistory: () => Payment[];
-  getPaymentById: (id: string) => Payment | undefined;
-}
+const PaymentHistoryContext = createContext(undefined);
 
-const PaymentHistoryContext = createContext<
-  PaymentHistoryContextType | undefined
->(undefined);
-
-export const PaymentHistoryProvider: React.FC<{
-  children: React.ReactNode;
-}> = ({ children }) => {
-  const [payments, setPayments] = useState<Payment[]>([
+export const PaymentHistoryProvider = ({ children }) => {
+  const [payments, setPayments] = useState([
     // Mock data
     {
       id: "PAY001",
@@ -39,7 +27,7 @@ export const PaymentHistoryProvider: React.FC<{
     },
   ]);
 
-  const addPayment = useCallback((payment: Payment) => {
+  const addPayment = useCallback((payment) => {
     setPayments((prevPayments) => [...prevPayments, payment]);
   }, []);
 
@@ -51,7 +39,7 @@ export const PaymentHistoryProvider: React.FC<{
   }, [payments]);
 
   const getPaymentById = useCallback(
-    (id: string) => {
+    (id) => {
       return payments.find((payment) => payment.id === id);
     },
     [payments]

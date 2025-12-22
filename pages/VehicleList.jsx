@@ -1,20 +1,17 @@
 import React, { useState, useMemo } from "react";
-import { VehicleCard } from "../components/VehicleCard";
-import { MapComponent } from "../components/MapComponent";
-import { BookingModal } from "../components/BookingModal";
-import { MOCK_VEHICLES } from "../constants";
-import { Vehicle, VehicleType } from "../types";
+import { VehicleCard } from "../components/VehicleCard.jsx";
+import { MapComponent } from "../components/MapComponent.jsx";
+import { BookingModal } from "../components/BookingModal.jsx";
+import { MOCK_VEHICLES } from "../constants.js";
 import { Search, Filter, AlertCircle, ShieldCheck, Map } from "lucide-react";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
-export const VehicleList: React.FC = () => {
+export const VehicleList = () => {
   const { t } = useLanguage();
-  const [selectedType, setSelectedType] = useState<string>("All");
+  const [selectedType, setSelectedType] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(
-    null
-  );
-  const [bookingVehicle, setBookingVehicle] = useState<Vehicle | null>(null);
+  const [selectedVehicleId, setSelectedVehicleId] = useState(null);
+  const [bookingVehicle, setBookingVehicle] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const filteredVehicles = useMemo(() => {
@@ -27,7 +24,7 @@ export const VehicleList: React.FC = () => {
     });
   }, [selectedType, searchQuery]);
 
-  const handleBook = (vehicle: Vehicle) => {
+  const handleBook = (vehicle) => {
     setBookingVehicle(vehicle);
   };
 

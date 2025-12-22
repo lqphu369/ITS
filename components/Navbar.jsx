@@ -10,19 +10,19 @@ import {
   ShoppingCart,
   History,
 } from "lucide-react";
-import { useCart } from "../contexts/CartContext";
-import { useAuth } from "../contexts/AuthContext";
-import { useLanguage } from "../contexts/LanguageContext";
-import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useCart } from "../contexts/CartContext.jsx";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
+import { LanguageSwitcher } from "./LanguageSwitcher.jsx";
 
-export const Navbar: React.FC = () => {
+export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, isAdmin, logout, isAuthenticated } = useAuth();
   const { t } = useLanguage();
   const { getTotalItems } = useCart();
 
-  const isActive = (path: string) => {
+  const isActive = (path) => {
     return location.pathname === path
       ? "text-blue-600 bg-blue-50"
       : "text-gray-600 hover:text-blue-600 hover:bg-gray-50";

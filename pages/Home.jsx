@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, ShieldCheck, Map, Smartphone } from "lucide-react";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
-export const Home: React.FC = () => {
+export const Home = () => {
   const { t } = useLanguage();
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">

@@ -1,12 +1,9 @@
 import React from "react";
-import { Vehicle, VehicleStatus } from "../types";
+import { VehicleStatus } from "../types.js";
 import { MapPin, Battery, Zap, Star } from "lucide-react";
-import { useLanguage } from "../contexts/LanguageContext";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
-export const VehicleCard: React.FC<VehicleCardProps> = ({
-  vehicle,
-  onBook,
-}) => {
+export const VehicleCard = ({ vehicle, onBook }) => {
   const { t } = useLanguage();
   return (
     <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">

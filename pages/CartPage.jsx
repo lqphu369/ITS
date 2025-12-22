@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import { Trash2, ShoppingCart, CreditCard } from "lucide-react";
-import { useCart } from "../contexts/CartContext";
-import { usePaymentHistory } from "../contexts/PaymentHistoryContext";
-import { useAuth } from "../contexts/AuthContext";
-import { useLanguage } from "../contexts/LanguageContext";
-import { Payment } from "../types";
+import { useCart } from "../contexts/CartContext.jsx";
+import { usePaymentHistory } from "../contexts/PaymentHistoryContext.jsx";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 
-export const CartPage: React.FC = () => {
+export const CartPage = () => {
   const { cartItems, removeFromCart, clearCart, getTotalPrice } = useCart();
   const { addPayment } = usePaymentHistory();
   const { user } = useAuth();
   const { t } = useLanguage();
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleRemoveItem = (itemId: string) => {
+  const handleRemoveItem = (itemId) => {
     removeFromCart(itemId);
   };
 
@@ -24,7 +23,7 @@ export const CartPage: React.FC = () => {
 
     // Simulate payment processing
     setTimeout(() => {
-      const payment: Payment = {
+      const payment = {
         id: `PAY${Date.now()}`,
         userId: user.id,
         cartItems: cartItems,

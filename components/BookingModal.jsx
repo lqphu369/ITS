@@ -1,19 +1,9 @@
 import React, { useState } from "react";
-import { Vehicle, CartItem } from "../types";
+import { VehicleStatus } from "../types.js";
 import { X, Calendar, CreditCard, ShoppingCart } from "lucide-react";
-import { useCart } from "../contexts/CartContext";
+import { useCart } from "../contexts/CartContext.jsx";
 
-interface BookingModalProps {
-  vehicle: Vehicle | null;
-  onClose: () => void;
-  onConfirm: () => void;
-}
-
-export const BookingModal: React.FC<BookingModalProps> = ({
-  vehicle,
-  onClose,
-  onConfirm,
-}) => {
+export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
   const [days, setDays] = useState(1);
   const [loading, setLoading] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
@@ -22,7 +12,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   if (!vehicle) return null;
 
   // Calculate price based on pricing tiers if available
-  const calculatePricePerDay = (days: number): number => {
+  const calculatePricePerDay = (days) => {
     if (vehicle.pricingTiers && vehicle.pricingTiers.length > 0) {
       // Sort tiers by minDays descending to prioritize longer durations
       const sortedTiers = [...vehicle.pricingTiers].sort(
@@ -65,7 +55,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
     const endDate = new Date(today);
     endDate.setDate(endDate.getDate() + days);
 
-    const cartItem: CartItem = {
+    const cartItem = {
       id: `${vehicle.id}_${Date.now()}`,
       vehicleId: vehicle.id,
       vehicleName: vehicle.name,
