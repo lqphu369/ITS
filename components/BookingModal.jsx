@@ -1,15 +1,40 @@
 import React, { useState } from "react";
 import { VehicleStatus } from "../types.js";
-import { X, Calendar, CreditCard, ShoppingCart } from "lucide-react";
+import {
+  X,
+  Calendar,
+  CreditCard,
+  ShoppingCart,
+  Clock,
+  MapPin,
+} from "lucide-react";
 import { useCart } from "../contexts/CartContext.jsx";
 
 export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
-  const [days, setDays] = useState(1);
+  const today = new Date().toISOString().split("T")[0];
+  const tomorrow = new Date(Date.now() + 86400000).toISOString().split("T")[0];
+
+  const [startDate, setStartDate] = useState(today);
+  const [endDate, setEndDate] = useState(tomorrow);
+  const [startTime, setStartTime] = useState("09:00");
+  const [endTime, setEndTime] = useState("09:00");
+  const [pickupLocation, setPickupLocation] = useState(vehicle?.address || "");
   const [loading, setLoading] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
   const { addToCart } = useCart();
 
   if (!vehicle) return null;
+
+  // Calculate days between dates
+  const calculateDays = () => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays || 1; // At least 1 day
+  };
+
+  const days = calculateDays();
 
   // Calculate price based on pricing tiers if available
   const calculatePricePerDay = (days) => {
@@ -51,16 +76,15 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
   };
 
   const handleAddToCart = () => {
-    const today = new Date();
-    const endDate = new Date(today);
-    endDate.setDate(endDate.getDate() + days);
-
     const cartItem = {
       id: `${vehicle.id}_${Date.now()}`,
       vehicleId: vehicle.id,
       vehicleName: vehicle.name,
-      startDate: today.toISOString().split("T")[0],
-      endDate: endDate.toISOString().split("T")[0],
+      startDate: startDate,
+      endDate: endDate,
+      startTime: startTime,
+      endTime: endTime,
+      pickupLocation: pickupLocation,
       days: days,
       pricePerDay: pricePerDay,
       totalPrice: total,
@@ -80,7 +104,7 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
       <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col animate-fade-in-up">
         <div className="p-3 sm:p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 sticky top-0 z-10">
           <h3 className="font-bold text-base sm:text-lg text-gray-800">
-            Confirm Booking
+            Xác nhận đặt xe
           </h3>
           <button
             onClick={onClose}
@@ -98,145 +122,231 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
               className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0"
             />
             <div className="min-w-0 flex-1">
-              <h4 className="font-bold text-gray-900 text-base sm:text-lg truncate">
+              <h4 className="font-bold text-sm sm:text-base text-gray-900 truncate">
                 {vehicle.name}
               </h4>
-              <p className="text-xs sm:text-sm text-gray-500">{vehicle.type}</p>
-              <p className="text-blue-600 font-medium mt-1 text-sm sm:text-base">
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(pricePerDay)}{" "}
-                / day
-                {vehicle.pricingTiers && days > 0 && (
-                  <span className="text-xs text-gray-500 block mt-0.5">
-                    ({days} {days === 1 ? "day" : "days"})
-                  </span>
-                )}
+              <p className="text-xs sm:text-sm text-gray-500 mt-1 flex items-center gap-1">
+                <MapPin className="w-3 h-3" />
+                {vehicle.address}
               </p>
             </div>
           </div>
 
-          <div className="space-y-3 sm:space-y-4">
-            <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-                Duration (Days)
-              </label>
-              <div className="flex items-center border rounded-lg p-2">
-                <Calendar className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 mr-2 flex-shrink-0" />
+          {/* Date & Time Selection */}
+          <div className="space-y-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Start Date */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <Calendar className="w-4 h-4 inline mr-1" />
+                  Ngày nhận xe
+                </label>
                 <input
-                  type="number"
-                  min="1"
-                  max="90"
-                  value={days}
-                  onChange={(e) => setDays(Number(e.target.value))}
-                  className="w-full outline-none text-gray-900 text-sm sm:text-base"
+                  type="date"
+                  value={startDate}
+                  min={today}
+                  onChange={(e) => {
+                    setStartDate(e.target.value);
+                    // Ensure end date is after start date
+                    if (e.target.value > endDate) {
+                      const nextDay = new Date(e.target.value);
+                      nextDay.setDate(nextDay.getDate() + 1);
+                      setEndDate(nextDay.toISOString().split("T")[0]);
+                    }
+                  }}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
-              {vehicle.pricingTiers && vehicle.pricingTiers.length > 0 && (
-                <div className="mt-2 p-2 bg-gray-50 rounded text-xs text-gray-600">
-                  <p className="font-medium mb-1">Bảng giá:</p>
-                  {vehicle.pricingTiers.map((tier, index) => (
-                    <p key={index} className="text-xs">
+
+              {/* Start Time */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <Clock className="w-4 h-4 inline mr-1" />
+                  Giờ nhận xe
+                </label>
+                <input
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+              </div>
+
+              {/* End Date */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <Calendar className="w-4 h-4 inline mr-1" />
+                  Ngày trả xe
+                </label>
+                <input
+                  type="date"
+                  value={endDate}
+                  min={startDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+              </div>
+
+              {/* End Time */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <Clock className="w-4 h-4 inline mr-1" />
+                  Giờ trả xe
+                </label>
+                <input
+                  type="time"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+              </div>
+            </div>
+
+            {/* Pickup Location */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <MapPin className="w-4 h-4 inline mr-1" />
+                Địa điểm nhận xe
+              </label>
+              <input
+                type="text"
+                value={pickupLocation}
+                onChange={(e) => setPickupLocation(e.target.value)}
+                placeholder="Nhập địa điểm nhận xe..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+              />
+            </div>
+          </div>
+
+          {/* Duration Summary */}
+          <div className="bg-blue-50 rounded-lg p-4 mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">
+                Thời gian thuê
+              </span>
+              <span className="text-lg font-bold text-blue-600">
+                {days} ngày
+              </span>
+            </div>
+            <div className="text-xs text-gray-600 space-y-1">
+              <p>
+                📅 Từ: {new Date(startDate).toLocaleDateString("vi-VN")} -{" "}
+                {startTime}
+              </p>
+              <p>
+                📅 Đến: {new Date(endDate).toLocaleDateString("vi-VN")} -{" "}
+                {endTime}
+              </p>
+            </div>
+          </div>
+
+          {/* Pricing Tiers Info */}
+          {vehicle.pricingTiers && vehicle.pricingTiers.length > 0 && (
+            <div className="mb-6 p-3 bg-gray-50 rounded-lg">
+              <p className="font-semibold text-sm text-gray-700 mb-2">
+                Bảng giá:
+              </p>
+              <div className="space-y-1">
+                {vehicle.pricingTiers.map((tier, index) => (
+                  <div
+                    key={index}
+                    className="text-xs text-gray-600 flex justify-between"
+                  >
+                    <span>
                       {tier.minDays === 30
-                        ? "30 ngày"
+                        ? "Từ 1 tháng"
                         : tier.maxDays
-                        ? `Từ ${tier.minDays} đến ${tier.maxDays} ngày`
+                        ? `${tier.minDays}-${tier.maxDays} ngày`
                         : `Từ ${tier.minDays} ngày`}
-                      :{" "}
+                    </span>
+                    <span className="font-medium">
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",
                         currency: "VND",
                       }).format(tier.pricePerDay)}
                       /ngày
-                    </p>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="bg-blue-50 p-3 sm:p-4 rounded-lg">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-xs sm:text-sm text-gray-600">
-                  Price per day
-                </span>
-                <span className="font-medium text-xs sm:text-sm">
-                  {new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(pricePerDay)}
-                </span>
-              </div>
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-xs sm:text-sm text-gray-600">Days</span>
-                <span className="font-medium text-xs sm:text-sm">{days}</span>
-              </div>
-              <div className="flex justify-between items-center mb-1 mt-2 pt-2 border-t border-blue-100">
-                <span className="text-xs sm:text-sm text-gray-600">
-                  Subtotal
-                </span>
-                <span className="font-medium text-xs sm:text-sm">
-                  {new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(total)}
-                </span>
-              </div>
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-xs sm:text-sm text-gray-600">
-                  Service Fee
-                </span>
-                <span className="font-medium text-xs sm:text-sm">0 ₫</span>
-              </div>
-              <div className="flex justify-between items-center mt-2 pt-2 border-t border-blue-100">
-                <span className="font-bold text-sm sm:text-base text-blue-900">
-                  Total
-                </span>
-                <span className="font-bold text-lg sm:text-xl text-blue-900">
-                  {new Intl.NumberFormat("vi-VN", {
-                    style: "currency",
-                    currency: "VND",
-                  }).format(total)}
-                </span>
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
+          )}
 
-          <div className="flex gap-3 px-4 sm:px-6 pb-4 sm:pb-6">
-            <button
-              onClick={handleAddToCart}
-              disabled={addedToCart}
-              className="flex-1 py-2.5 sm:py-3 px-4 rounded-lg sm:rounded-xl font-bold flex items-center justify-center gap-2 transition-all text-sm sm:text-base active:scale-95 min-h-[44px] border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
-            >
-              {addedToCart ? (
-                <span className="animate-pulse whitespace-nowrap">
-                  Thêm vào giỏ...
-                </span>
-              ) : (
-                <>
-                  <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                  <span>Thêm giỏ hàng</span>
-                </>
-              )}
-            </button>
-
-            <button
-              onClick={handleBook}
-              disabled={loading}
-              className="flex-1 py-2.5 sm:py-3 px-4 rounded-lg sm:rounded-xl font-bold flex items-center justify-center gap-2 transition-all text-sm sm:text-base active:scale-95 min-h-[44px] bg-blue-600 text-white hover:bg-blue-700"
-            >
-              {loading ? (
-                <span className="animate-pulse whitespace-nowrap">
-                  Đang xử lý...
-                </span>
-              ) : (
-                <>
-                  <CreditCard className="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-                  <span>Thanh toán</span>
-                </>
-              )}
-            </button>
+          {/* Price Breakdown */}
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-600">Giá mỗi ngày</span>
+              <span className="font-medium text-sm">
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(pricePerDay)}
+              </span>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-600">Số ngày</span>
+              <span className="font-medium text-sm">{days}</span>
+            </div>
+            <div className="flex justify-between items-center mb-2 mt-3 pt-3 border-t border-blue-100">
+              <span className="text-sm text-gray-600">Tạm tính</span>
+              <span className="font-medium text-sm">
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(total)}
+              </span>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm text-gray-600">Phí dịch vụ</span>
+              <span className="font-medium text-sm">0 ₫</span>
+            </div>
+            <div className="flex justify-between items-center mt-3 pt-3 border-t border-blue-100">
+              <span className="font-bold text-base text-blue-900">
+                Tổng cộng
+              </span>
+              <span className="font-bold text-xl text-blue-900">
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(total)}
+              </span>
+            </div>
           </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex gap-3 px-4 sm:px-6 pb-4 sm:pb-6 border-t pt-4">
+          <button
+            onClick={handleAddToCart}
+            disabled={addedToCart}
+            className="flex-1 py-3 px-4 rounded-lg font-bold flex items-center justify-center gap-2 transition-all text-sm active:scale-95 min-h-[44px] border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+          >
+            {addedToCart ? (
+              <span className="animate-pulse whitespace-nowrap">Đã thêm ✓</span>
+            ) : (
+              <>
+                <ShoppingCart className="w-4 h-4 flex-shrink-0" />
+                <span>Thêm giỏ hàng</span>
+              </>
+            )}
+          </button>
+
+          <button
+            onClick={handleBook}
+            disabled={loading}
+            className="flex-1 py-3 px-4 rounded-lg font-bold flex items-center justify-center gap-2 transition-all text-sm active:scale-95 min-h-[44px] bg-blue-600 text-white hover:bg-blue-700"
+          >
+            {loading ? (
+              <span className="animate-pulse whitespace-nowrap">
+                Đang xử lý...
+              </span>
+            ) : (
+              <>
+                <CreditCard className="w-4 h-4 flex-shrink-0" />
+                <span>Thanh toán</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </div>

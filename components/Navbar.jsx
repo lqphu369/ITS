@@ -111,8 +111,16 @@ export const Navbar = () => {
                   <History className="w-5 h-5" />
                 </Link>
 
+                {/* Profile Icon */}
+                <Link
+                  to="/profile"
+                  className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  title="Hồ sơ"
+                >
+                  <UserCircle className="w-5 h-5" />
+                </Link>
+
                 <div className="hidden md:flex items-center gap-2 px-2 md:px-3 py-1.5 bg-gray-50 rounded-lg">
-                  <UserCircle className="w-4 h-4 text-gray-600" />
                   <span className="text-xs md:text-sm font-medium text-gray-700 truncate max-w-[100px] lg:max-w-none">
                     {user?.name}
                   </span>

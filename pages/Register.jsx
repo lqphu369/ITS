@@ -85,6 +85,9 @@ export const Register = () => {
 
       if (result.success) {
         setSuccess(true);
+        alert(
+          "✅ Đăng ký thành công! Một email xác minh đã được gửi đến hộp thư của bạn.\n(Tính năng xác minh OTP/Email sẽ được tích hợp sớm!)"
+        );
         setTimeout(() => {
           navigate("/login");
         }, 2000);

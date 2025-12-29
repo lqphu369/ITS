@@ -13,9 +13,12 @@ import { Navbar } from "./components/Navbar.jsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import { Home } from "./pages/Home.jsx";
 import { VehicleList } from "./pages/VehicleList.jsx";
+import { VehicleDetail } from "./pages/VehicleDetail.jsx";
 import { AdminDashboard } from "./pages/AdminDashboard.jsx";
 import { CartPage } from "./pages/CartPage.jsx";
 import { PaymentHistoryPage } from "./pages/PaymentHistoryPage.jsx";
+import { OrderTrackingPage } from "./pages/OrderTrackingPage.jsx";
+import { ProfilePage } from "./pages/ProfilePage.jsx";
 import { Login } from "./pages/Login.jsx";
 import { Register } from "./pages/Register.jsx";
 
@@ -42,6 +45,14 @@ function AppLayout() {
             }
           />
           <Route
+            path="/vehicle/:id"
+            element={
+              <ProtectedRoute requireAuth={true}>
+                <VehicleDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/cart"
             element={
               <ProtectedRoute requireAuth={true}>
@@ -54,6 +65,22 @@ function AppLayout() {
             element={
               <ProtectedRoute requireAuth={true}>
                 <PaymentHistoryPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/orders"
+            element={
+              <ProtectedRoute requireAuth={true}>
+                <OrderTrackingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute requireAuth={true}>
+                <ProfilePage />
               </ProtectedRoute>
             }
           />

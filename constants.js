@@ -8,6 +8,9 @@ export const MOCK_VEHICLES = [
   {
     id: "1",
     name: "Honda Vision",
+    brand: "Honda",
+    seats: 2,
+    area: "Quận 1",
     type: VehicleType.MOTORBIKE,
     pricePerDay: 150000,
     location: { lat: 10.777, lng: 106.701 },
@@ -26,6 +29,9 @@ export const MOCK_VEHICLES = [
   {
     id: "2",
     name: "Airblade 150",
+    brand: "Honda",
+    seats: 2,
+    area: "Quận 3",
     type: VehicleType.MOTORBIKE,
     pricePerDay: 250000,
     location: { lat: 10.78, lng: 106.698 },
@@ -44,6 +50,9 @@ export const MOCK_VEHICLES = [
   {
     id: "3",
     name: "Vario 150",
+    brand: "Honda",
+    seats: 2,
+    area: "Quận 4",
     type: VehicleType.MOTORBIKE,
     pricePerDay: 300000,
     location: { lat: 10.772, lng: 106.705 },
@@ -62,6 +71,9 @@ export const MOCK_VEHICLES = [
   {
     id: "4",
     name: "Winner X",
+    brand: "Honda",
+    seats: 2,
+    area: "Quận 5",
     type: VehicleType.MOTORBIKE,
     pricePerDay: 250000,
     location: { lat: 10.765, lng: 106.69 },
@@ -80,6 +92,9 @@ export const MOCK_VEHICLES = [
   {
     id: "5",
     name: "SH 150i",
+    brand: "Honda",
+    seats: 2,
+    area: "Bình Thạnh",
     type: VehicleType.MOTORBIKE,
     pricePerDay: 450000,
     location: { lat: 10.79, lng: 106.71 },
@@ -97,6 +112,9 @@ export const MOCK_VEHICLES = [
   {
     id: "6",
     name: "Honda Cub 50",
+    brand: "Honda",
+    seats: 2,
+    area: "Quận 9",
     type: VehicleType.MOTORBIKE,
     pricePerDay: 100000, // Base price (1-2 days)
     location: { lat: 10.8417, lng: 106.8097 }, // District 9, HCMC

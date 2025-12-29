@@ -1,10 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { VehicleStatus } from "../types.js";
-import { MapPin, Battery, Zap, Star } from "lucide-react";
+import { MapPin, Battery, Zap, Star, Eye } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 export const VehicleCard = ({ vehicle, onBook }) => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white rounded-lg sm:rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
       <div className="relative h-40 sm:h-48 w-full">
@@ -65,6 +68,13 @@ export const VehicleCard = ({ vehicle, onBook }) => {
         </div>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mt-3 sm:mt-4 border-t border-gray-50 pt-3">
+          <button
+            onClick={() => navigate(`/vehicle/${vehicle.id}`)}
+            className="w-full sm:w-auto px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold transition-colors active:scale-95 bg-gray-100 text-gray-700 hover:bg-gray-200 flex items-center justify-center gap-1"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            {t("vehicleCard.viewDetails") || "Xem chi tiết"}
+          </button>
           <button
             onClick={() => onBook(vehicle)}
             disabled={vehicle.status !== VehicleStatus.AVAILABLE}

@@ -3,16 +3,46 @@ import { VehicleCard } from "../components/VehicleCard.jsx";
 import { MapComponent } from "../components/MapComponent.jsx";
 import { BookingModal } from "../components/BookingModal.jsx";
 import { MOCK_VEHICLES } from "../constants.js";
-import { Search, Filter, AlertCircle, ShieldCheck, Map } from "lucide-react";
+import {
+  Search,
+  Filter,
+  AlertCircle,
+  ShieldCheck,
+  Map,
+  X,
+  SlidersHorizontal,
+} from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
 
 export const VehicleList = () => {
   const { t } = useLanguage();
   const [selectedType, setSelectedType] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("All");
+  const [selectedSeats, setSelectedSeats] = useState("All");
+  const [selectedArea, setSelectedArea] = useState("All");
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
+  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [selectedVehicleId, setSelectedVehicleId] = useState(null);
   const [bookingVehicle, setBookingVehicle] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+
+  // Get unique values for filters
+  const brands = useMemo(() => {
+    const uniqueBrands = [...new Set(MOCK_VEHICLES.map((v) => v.brand))];
+    return ["All", ...uniqueBrands];
+  }, []);
+
+  const areas = useMemo(() => {
+    const uniqueAreas = [...new Set(MOCK_VEHICLES.map((v) => v.area))];
+    return ["All", ...uniqueAreas];
+  }, []);
+
+  const seats = useMemo(() => {
+    const uniqueSeats = [...new Set(MOCK_VEHICLES.map((v) => v.seats))];
+    return ["All", ...uniqueSeats.sort((a, b) => a - b)];
+  }, []);
 
   const filteredVehicles = useMemo(() => {
     return MOCK_VEHICLES.filter((v) => {
@@ -20,9 +50,29 @@ export const VehicleList = () => {
       const matchesSearch =
         v.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         v.address.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesType && matchesSearch;
+      const matchesBrand = selectedBrand === "All" || v.brand === selectedBrand;
+      const matchesSeats = selectedSeats === "All" || v.seats === selectedSeats;
+      const matchesArea = selectedArea === "All" || v.area === selectedArea;
+      const matchesPrice =
+        v.pricePerDay >= priceRange[0] && v.pricePerDay <= priceRange[1];
+
+      return (
+        matchesType &&
+        matchesSearch &&
+        matchesBrand &&
+        matchesSeats &&
+        matchesArea &&
+        matchesPrice
+      );
     });
-  }, [selectedType, searchQuery]);
+  }, [
+    selectedType,
+    searchQuery,
+    selectedBrand,
+    selectedSeats,
+    selectedArea,
+    priceRange,
+  ]);
 
   const handleBook = (vehicle) => {
     setBookingVehicle(vehicle);
@@ -34,13 +84,28 @@ export const VehicleList = () => {
     setTimeout(() => setShowSuccess(false), 3000);
   };
 
-  const [showMap, setShowMap] = useState(false);
+  const clearAllFilters = () => {
+    setSelectedType("All");
+    setSearchQuery("");
+    setSelectedBrand("All");
+    setSelectedSeats("All");
+    setSelectedArea("All");
+    setPriceRange([0, 1000000]);
+  };
+
+  const hasActiveFilters =
+    selectedBrand !== "All" ||
+    selectedSeats !== "All" ||
+    selectedArea !== "All" ||
+    priceRange[0] !== 0 ||
+    priceRange[1] !== 1000000;
 
   return (
     <div className="flex flex-col h-[calc(100vh-56px)] sm:h-[calc(100vh-64px)] overflow-hidden">
       {/* Filters Toolbar */}
       <div className="bg-white border-b border-gray-200 p-3 sm:p-4 shadow-sm z-10">
         <div className="max-w-7xl mx-auto flex flex-col gap-3 sm:gap-4">
+          {/* Search Bar */}
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
@@ -52,6 +117,28 @@ export const VehicleList = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+
+            {/* Advanced Filter Toggle */}
+            <button
+              onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
+              className={`p-2 rounded-lg transition-colors flex items-center gap-2 ${
+                showAdvancedFilters || hasActiveFilters
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+            >
+              <SlidersHorizontal className="w-5 h-5" />
+              {hasActiveFilters && (
+                <span className="hidden sm:inline text-sm font-medium">
+                  Lọc (
+                  {(selectedBrand !== "All" ? 1 : 0) +
+                    (selectedSeats !== "All" ? 1 : 0) +
+                    (selectedArea !== "All" ? 1 : 0)}
+                  )
+                </span>
+              )}
+            </button>
+
             {/* Mobile Map Toggle */}
             <button
               onClick={() => setShowMap(!showMap)}
@@ -62,6 +149,115 @@ export const VehicleList = () => {
             </button>
           </div>
 
+          {/* Advanced Filters Panel */}
+          {showAdvancedFilters && (
+            <div className="bg-gray-50 rounded-lg p-4 space-y-4 animate-fade-in">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-semibold text-gray-900">Bộ lọc nâng cao</h3>
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearAllFilters}
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                  >
+                    <X className="w-4 h-4" />
+                    Xóa bộ lọc
+                  </button>
+                )}
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Brand Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Hãng xe
+                  </label>
+                  <select
+                    value={selectedBrand}
+                    onChange={(e) => setSelectedBrand(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  >
+                    {brands.map((brand) => (
+                      <option key={brand} value={brand}>
+                        {brand === "All" ? "Tất cả" : brand}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Seats Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Số chỗ
+                  </label>
+                  <select
+                    value={selectedSeats}
+                    onChange={(e) =>
+                      setSelectedSeats(
+                        e.target.value === "All"
+                          ? "All"
+                          : Number(e.target.value)
+                      )
+                    }
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  >
+                    {seats.map((seat) => (
+                      <option key={seat} value={seat}>
+                        {seat === "All" ? "Tất cả" : `${seat} chỗ`}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Area Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Khu vực
+                  </label>
+                  <select
+                    value={selectedArea}
+                    onChange={(e) => setSelectedArea(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  >
+                    {areas.map((area) => (
+                      <option key={area} value={area}>
+                        {area === "All" ? "Tất cả" : area}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Price Range Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Giá (VNĐ/ngày)
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="number"
+                      placeholder="Min"
+                      value={priceRange[0]}
+                      onChange={(e) =>
+                        setPriceRange([Number(e.target.value), priceRange[1]])
+                      }
+                      className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs"
+                    />
+                    <span className="text-gray-500">-</span>
+                    <input
+                      type="number"
+                      placeholder="Max"
+                      value={priceRange[1]}
+                      onChange={(e) =>
+                        setPriceRange([priceRange[0], Number(e.target.value)])
+                      }
+                      className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Quick Filter Buttons */}
           <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-hide">
             <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex-shrink-0" />
             <button
@@ -75,7 +271,7 @@ export const VehicleList = () => {
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
-              All
+              Tất cả
             </button>
             <button
               onClick={() => {
