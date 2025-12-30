@@ -30,18 +30,18 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 export const AdminDashboard = () => {
   return (
-    <div className="min-h-screen bg-gray-50 p-3 sm:p-4 md:p-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 p-3 sm:p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0 mb-6 sm:mb-8">
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               Admin Dashboard
             </h1>
-            <p className="text-xs sm:text-sm md:text-base text-gray-500 mt-1">
+            <p className="text-xs sm:text-sm md:text-base text-gray-500 dark:text-gray-400 mt-1">
               Overview of fleet performance and revenue
             </p>
           </div>
-          <button className="bg-gray-900 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 transition-colors text-xs sm:text-sm">
+          <button className="bg-gray-900 dark:bg-gray-700 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex items-center gap-2 hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors text-xs sm:text-sm">
             <Settings className="w-3 h-3 sm:w-4 sm:h-4" />{" "}
             <span className="hidden sm:inline">Settings</span>
           </button>
@@ -49,54 +49,60 @@ export const AdminDashboard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="bg-blue-100 p-2 sm:p-3 rounded-lg text-blue-600">
+              <div className="bg-blue-100 dark:bg-blue-900/30 p-2 sm:p-3 rounded-lg text-blue-600 dark:text-blue-400">
                 <DollarSign className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </div>
-              <span className="text-green-500 text-xs sm:text-sm font-bold">
+              <span className="text-green-500 dark:text-green-400 text-xs sm:text-sm font-bold">
                 +12.5%
               </span>
             </div>
-            <p className="text-gray-500 text-xs sm:text-sm">Total Revenue</p>
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
+            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
+              Total Revenue
+            </p>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mt-1">
               45.2M ₫
             </h3>
           </div>
 
-          <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="bg-purple-100 p-2 sm:p-3 rounded-lg text-purple-600">
+              <div className="bg-purple-100 dark:bg-purple-900/30 p-2 sm:p-3 rounded-lg text-purple-600 dark:text-purple-400">
                 <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </div>
-              <span className="text-green-500 text-xs sm:text-sm font-bold">
+              <span className="text-green-500 dark:text-green-400 text-xs sm:text-sm font-bold">
                 +5.2%
               </span>
             </div>
-            <p className="text-gray-500 text-xs sm:text-sm">Total Bookings</p>
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
+            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
+              Total Bookings
+            </p>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mt-1">
               128
             </h3>
           </div>
 
-          <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="bg-yellow-100 p-2 sm:p-3 rounded-lg text-yellow-600">
+              <div className="bg-yellow-100 dark:bg-yellow-900/30 p-2 sm:p-3 rounded-lg text-yellow-600 dark:text-yellow-400">
                 <Activity className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </div>
-              <span className="text-red-500 text-xs sm:text-sm font-bold">
+              <span className="text-red-500 dark:text-red-400 text-xs sm:text-sm font-bold">
                 -2.1%
               </span>
             </div>
-            <p className="text-gray-500 text-xs sm:text-sm">Active Fleet</p>
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mt-1">
+            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">
+              Active Fleet
+            </p>
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mt-1">
               85%
             </h3>
           </div>
 
-          <div className="bg-white p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-100">
+          <div className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="bg-pink-100 p-2 sm:p-3 rounded-lg text-pink-600">
+              <div className="bg-pink-100 dark:bg-pink-900/30 p-2 sm:p-3 rounded-lg text-pink-600 dark:text-pink-400">
                 <Users className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6" />
               </div>
               <span className="text-green-500 text-xs sm:text-sm font-bold">

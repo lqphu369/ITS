@@ -9,6 +9,7 @@ import { AuthProvider } from "./contexts/AuthContext.jsx";
 import { LanguageProvider } from "./contexts/LanguageContext.jsx";
 import { CartProvider } from "./contexts/CartContext.jsx";
 import { PaymentHistoryProvider } from "./contexts/PaymentHistoryContext.jsx";
+import { ThemeProvider } from "./contexts/ThemeContext.jsx";
 import { Navbar } from "./components/Navbar.jsx";
 import { ProtectedRoute } from "./components/ProtectedRoute.jsx";
 import { Home } from "./pages/Home.jsx";
@@ -24,7 +25,7 @@ import { Register } from "./pages/Register.jsx";
 
 function AppLayout() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-300">
       <Navbar />
       <main className="flex-1 relative">
         <Routes>
@@ -101,21 +102,23 @@ function AppLayout() {
 
 function App() {
   return (
-    <LanguageProvider>
-      <AuthProvider>
-        <CartProvider>
-          <PaymentHistoryProvider>
-            <Router>
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/*" element={<AppLayout />} />
-              </Routes>
-            </Router>
-          </PaymentHistoryProvider>
-        </CartProvider>
-      </AuthProvider>
-    </LanguageProvider>
+    <ThemeProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <CartProvider>
+            <PaymentHistoryProvider>
+              <Router>
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/*" element={<AppLayout />} />
+                </Routes>
+              </Router>
+            </PaymentHistoryProvider>
+          </CartProvider>
+        </AuthProvider>
+      </LanguageProvider>
+    </ThemeProvider>
   );
 }
 

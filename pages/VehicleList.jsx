@@ -3,6 +3,7 @@ import { VehicleCard } from "../components/VehicleCard.jsx";
 import { MapComponent } from "../components/MapComponent.jsx";
 import { BookingModal } from "../components/BookingModal.jsx";
 import { MOCK_VEHICLES } from "../constants.js";
+import { Geolocation } from "@capacitor/geolocation";
 import {
   Search,
   Filter,
@@ -56,33 +57,26 @@ export const VehicleList = () => {
   }, []);
 
   // Get user location
-  const getUserLocation = () => {
+  const getUserLocation = async () => {
     setLoadingLocation(true);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          });
-          setLoadingLocation(false);
-          setSortByDistance(true);
-          setShowMap(true);
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          // Fallback to default location
-          setUserLocation({
-            lat: 10.7769,
-            lng: 106.7009,
-          });
-          setLoadingLocation(false);
-          alert(t("vehicleList.locationError"));
-        }
-      );
-    } else {
-      alert(t("vehicleList.locationNotSupported"));
+    try {
+      const position = await Geolocation.getCurrentPosition();
+      setUserLocation({
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      });
       setLoadingLocation(false);
+      setSortByDistance(true);
+      setShowMap(true);
+    } catch (error) {
+      console.error("Error getting location:", error);
+      // Fallback to default location
+      setUserLocation({
+        lat: 10.7769,
+        lng: 106.7009,
+      });
+      setLoadingLocation(false);
+      alert(t("vehicleList.locationError"));
     }
   };
 
@@ -269,18 +263,18 @@ export const VehicleList = () => {
     priceRange[1] !== 1000000;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-56px)] sm:h-[calc(100vh-64px)] overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-56px)] sm:h-[calc(100vh-64px)] overflow-hidden bg-gray-50 dark:bg-gray-900">
       {/* Filters Toolbar */}
-      <div className="bg-white border-b border-gray-200 p-3 sm:p-4 shadow-sm z-10">
+      <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 p-3 sm:p-4 shadow-sm z-10">
         <div className="max-w-7xl mx-auto flex flex-col gap-3 sm:gap-4">
           {/* Search Bar */}
           <div className="flex items-center gap-2">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-4 h-4 sm:w-5 sm:h-5" />
               <input
                 type="text"
                 placeholder={t("vehicleList.searchPlaceholder")}
-                className="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm sm:text-base border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full pl-9 sm:pl-10 pr-4 py-2 text-sm sm:text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -292,7 +286,7 @@ export const VehicleList = () => {
               className={`p-2 rounded-lg transition-colors flex items-center gap-2 ${
                 showAdvancedFilters || hasActiveFilters
                   ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               <SlidersHorizontal className="w-5 h-5" />
@@ -332,7 +326,7 @@ export const VehicleList = () => {
               className={`p-2 rounded-lg transition-colors flex items-center gap-2 ${
                 showAddressInput
                   ? "bg-purple-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
               title={t("vehicleList.searchAddress")}
             >
@@ -354,14 +348,14 @@ export const VehicleList = () => {
 
           {/* Address Input Panel */}
           {showAddressInput && (
-            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 animate-fade-in">
+            <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 animate-fade-in">
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
-                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-500 w-5 h-5" />
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-500 dark:text-purple-400 w-5 h-5" />
                   <input
                     type="text"
                     placeholder={t("vehicleList.addressPlaceholder")}
-                    className="w-full pl-10 pr-4 py-2 text-sm border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                    className="w-full pl-10 pr-4 py-2 text-sm border border-purple-300 dark:border-purple-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                     value={addressInput}
                     onChange={(e) => setAddressInput(e.target.value)}
                     onKeyPress={(e) => {
@@ -390,9 +384,9 @@ export const VehicleList = () => {
 
           {/* Advanced Filters Panel */}
           {showAdvancedFilters && (
-            <div className="bg-gray-50 rounded-lg p-4 space-y-4 animate-fade-in">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-4 animate-fade-in">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-gray-900">
+                <h3 className="font-semibold text-gray-900 dark:text-white">
                   {t("vehicleList.advancedFilters")}
                 </h3>
                 {hasActiveFilters && (
@@ -409,13 +403,13 @@ export const VehicleList = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Brand Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t("vehicleList.brand")}
                   </label>
                   <select
                     value={selectedBrand}
                     onChange={(e) => setSelectedBrand(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   >
                     {brands.map((brand) => (
                       <option key={brand} value={brand}>
@@ -427,7 +421,7 @@ export const VehicleList = () => {
 
                 {/* Seats Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t("vehicleList.seats")}
                   </label>
                   <select
@@ -439,7 +433,7 @@ export const VehicleList = () => {
                           : Number(e.target.value)
                       )
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   >
                     {seats.map((seat) => (
                       <option key={seat} value={seat}>
@@ -453,13 +447,13 @@ export const VehicleList = () => {
 
                 {/* Area Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t("vehicleList.area")}
                   </label>
                   <select
                     value={selectedArea}
                     onChange={(e) => setSelectedArea(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   >
                     {areas.map((area) => (
                       <option key={area} value={area}>
@@ -471,7 +465,7 @@ export const VehicleList = () => {
 
                 {/* Price Range Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {t("vehicleList.price")}
                   </label>
                   <div className="flex items-center gap-2">
@@ -482,9 +476,9 @@ export const VehicleList = () => {
                       onChange={(e) =>
                         setPriceRange([Number(e.target.value), priceRange[1]])
                       }
-                      className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs"
+                      className="w-full px-2 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
-                    <span className="text-gray-500">-</span>
+                    <span className="text-gray-500 dark:text-gray-400">-</span>
                     <input
                       type="number"
                       placeholder="Max"
@@ -492,7 +486,7 @@ export const VehicleList = () => {
                       onChange={(e) =>
                         setPriceRange([priceRange[0], Number(e.target.value)])
                       }
-                      className="w-full px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs"
+                      className="w-full px-2 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 text-xs bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -510,8 +504,8 @@ export const VehicleList = () => {
               }}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
                 searchQuery === ""
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-blue-600 dark:bg-blue-500 text-white"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               Tất cả
@@ -523,8 +517,8 @@ export const VehicleList = () => {
               }}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
                 searchQuery === "vario"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-blue-600 dark:bg-blue-500 text-white"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               Vario
@@ -536,8 +530,8 @@ export const VehicleList = () => {
               }}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-colors flex-shrink-0 ${
                 searchQuery === "airblade"
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  ? "bg-blue-600 dark:bg-blue-500 text-white"
+                  : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
             >
               Airblade
@@ -551,28 +545,28 @@ export const VehicleList = () => {
         <div
           className={`${
             showMap ? "hidden" : "flex"
-          } lg:flex w-full lg:w-1/2 xl:w-2/5 flex-col overflow-y-auto p-3 sm:p-4 bg-gray-50 pb-20`}
+          } lg:flex w-full lg:w-1/2 xl:w-2/5 flex-col overflow-y-auto p-3 sm:p-4 bg-gray-50 dark:bg-gray-900 pb-20`}
         >
           <div className="max-w-2xl mx-auto w-full space-y-3 sm:space-y-4">
             <div className="flex justify-between items-center mb-2">
-              <h2 className="text-base sm:text-lg font-bold text-gray-800">
+              <h2 className="text-base sm:text-lg font-bold text-gray-800 dark:text-white">
                 {t("vehicleList.title")}
               </h2>
-              <span className="text-xs sm:text-sm text-gray-500">
+              <span className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                 {filteredVehicles.length} {t("vehicleList.results")}
               </span>
             </div>
 
             {calculatingRoutes && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 flex items-center gap-2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-700"></div>
+              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 text-sm text-blue-700 dark:text-blue-400 flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-700 dark:border-blue-400"></div>
                 <span>{t("vehicleList.calculatingRoutes")}</span>
               </div>
             )}
 
             {filteredVehicles.length === 0 ? (
-              <div className="text-center py-20 text-gray-500">
-                <AlertCircle className="w-12 h-12 mx-auto mb-2 text-gray-300" />
+              <div className="text-center py-20 text-gray-500 dark:text-gray-400">
+                <AlertCircle className="w-12 h-12 mx-auto mb-2 text-gray-300 dark:text-gray-600" />
                 <p>{t("vehicleList.noResults")}</p>
               </div>
             ) : (
@@ -610,17 +604,19 @@ export const VehicleList = () => {
 
           {/* Nearest Vehicle Info Card */}
           {nearestVehicle && userLocation && (
-            <div className="absolute top-4 left-4 right-4 bg-white p-4 rounded-lg shadow-lg z-10 animate-fade-in">
+            <div className="absolute top-4 left-4 right-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg z-10 animate-fade-in">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <Navigation className="w-5 h-5 text-green-600" />
-                    <h3 className="font-semibold text-gray-900">Xe gần nhất</h3>
+                    <Navigation className="w-5 h-5 text-green-600 dark:text-green-400" />
+                    <h3 className="font-semibold text-gray-900 dark:text-white">
+                      Xe gần nhất
+                    </h3>
                   </div>
-                  <p className="text-sm font-medium text-gray-700 mb-1">
+                  <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     {nearestVehicle.name}
                   </p>
-                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <MapPin className="w-4 h-4" />
                     <span>
                       {nearestVehicle.distance
@@ -633,8 +629,8 @@ export const VehicleList = () => {
                   onClick={() => setShowRoute(!showRoute)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
                     showRoute
-                      ? "bg-blue-600 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "bg-blue-600 dark:bg-blue-500 text-white"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
                   }`}
                 >
                   {showRoute ? "Ẩn lộ trình" : "Hiện lộ trình"}
@@ -644,16 +640,16 @@ export const VehicleList = () => {
           )}
 
           {/* Map Legend Overlay */}
-          <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 bg-white p-2 sm:p-3 rounded-lg shadow-lg z-10 text-xs">
+          <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 bg-white dark:bg-gray-800 p-2 sm:p-3 rounded-lg shadow-lg z-10 text-xs">
             <div className="flex items-center gap-1.5 sm:gap-2 mb-1">
-              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-600 block"></span>
-              <span className="text-xs">
+              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-blue-600 dark:bg-blue-500 block"></span>
+              <span className="text-xs text-gray-900 dark:text-white">
                 {t("vehicleList.mapLegend.available")}
               </span>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-400 block"></span>
-              <span className="text-xs">
+              <span className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-gray-400 dark:bg-gray-600 block"></span>
+              <span className="text-xs text-gray-900 dark:text-white">
                 {t("vehicleList.mapLegend.unavailable")}
               </span>
             </div>

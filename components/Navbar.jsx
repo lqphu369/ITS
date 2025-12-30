@@ -9,10 +9,13 @@ import {
   UserCircle,
   ShoppingCart,
   History,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { useCart } from "../contexts/CartContext.jsx";
 import { useAuth } from "../contexts/AuthContext.jsx";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
+import { useTheme } from "../contexts/ThemeContext.jsx";
 import { LanguageSwitcher } from "./LanguageSwitcher.jsx";
 
 export const Navbar = () => {
@@ -20,13 +23,14 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { user, isAdmin, logout, isAuthenticated } = useAuth();
   const { t } = useLanguage();
+  const { isDark, toggleTheme } = useTheme();
   const { getTotalItems } = useCart();
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const isActive = (path) => {
     return location.pathname === path
-      ? "text-blue-600 bg-blue-50"
-      : "text-gray-600 hover:text-blue-600 hover:bg-gray-50";
+      ? "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30"
+      : "text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800";
   };
 
   const handleLogout = () => {
@@ -40,7 +44,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
           <div className="flex items-center min-w-0">
@@ -53,7 +57,7 @@ export const Navbar = () => {
                 alt="MixiRide Logo"
                 className="h-10 w-10 sm:h-12 sm:w-12 rounded-lg object-contain"
               />
-              <span className="font-bold text-base sm:text-xl text-gray-900 tracking-tight hidden xs:inline">
+              <span className="font-bold text-base sm:text-xl text-gray-900 dark:text-white tracking-tight hidden xs:inline">
                 MixiRide
               </span>
             </Link>
@@ -97,7 +101,7 @@ export const Navbar = () => {
                 {/* Cart Icon */}
                 <Link
                   to="/cart"
-                  className="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="relative p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   title={t("nav.cart")}
                 >
                   <ShoppingCart className="w-5 h-5" />
@@ -111,7 +115,7 @@ export const Navbar = () => {
                 {/* Payment History Icon */}
                 <Link
                   to="/payment-history"
-                  className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   title={t("nav.paymentHistory")}
                 >
                   <History className="w-5 h-5" />
@@ -120,23 +124,37 @@ export const Navbar = () => {
                 {/* Profile Icon */}
                 <Link
                   to="/profile"
-                  className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                   title={t("nav.profile")}
                 >
                   <UserCircle className="w-5 h-5" />
                 </Link>
 
-                <div className="hidden md:flex items-center gap-2 px-2 md:px-3 py-1.5 bg-gray-50 rounded-lg">
-                  <span className="text-xs md:text-sm font-medium text-gray-700 truncate max-w-[100px] lg:max-w-none">
+                <div className="hidden md:flex items-center gap-2 px-2 md:px-3 py-1.5 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                  <span className="text-xs md:text-sm font-medium text-gray-700 dark:text-gray-300 truncate max-w-[100px] lg:max-w-none">
                     {user?.name}
                   </span>
                 </div>
                 {isAdmin && (
-                  <span className="hidden lg:flex items-center gap-1 px-2 md:px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs md:text-sm font-medium">
+                  <span className="hidden lg:flex items-center gap-1 px-2 md:px-3 py-1 bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 rounded-full text-xs md:text-sm font-medium">
                     <Shield className="w-3 h-3 md:w-4 md:h-4" />{" "}
                     {t("nav.admin")}
                   </span>
                 )}
+
+                {/* Theme Toggle */}
+                <button
+                  onClick={toggleTheme}
+                  className="p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  title={isDark ? t("theme.light") : t("theme.dark")}
+                >
+                  {isDark ? (
+                    <Sun className="w-5 h-5" />
+                  ) : (
+                    <Moon className="w-5 h-5" />
+                  )}
+                </button>
+
                 <LanguageSwitcher />
                 <button
                   onClick={handleLogout}
@@ -161,7 +179,7 @@ export const Navbar = () => {
         </div>
       </div>
       {/* Mobile menu */}
-      <div className="sm:hidden border-t border-gray-100 bg-white">
+      <div className="sm:hidden border-t border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900">
         <div className="flex justify-around items-center py-2">
           {isAdmin ? (
             <Link
@@ -201,25 +219,25 @@ export const Navbar = () => {
       {/* Logout Confirmation Modal */}
       {showLogoutConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
-          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4 animate-fade-in-up">
-            <h3 className="text-lg font-bold text-gray-900 mb-2">
-              Xác nhận đăng xuất
+          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl p-6 w-full max-w-sm mx-4 animate-fade-in-up">
+            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+              {t("common.confirmLogout")}
             </h3>
-            <p className="text-gray-600 mb-6">
-              Bạn có chắc sẽ đăng xuất không?
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              {t("common.confirmLogoutMessage")}
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowLogoutConfirm(false)}
-                className="flex-1 px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors"
+                className="flex-1 px-4 py-2 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition-colors"
               >
-                Không
+                {t("common.no")}
               </button>
               <button
                 onClick={confirmLogout}
                 className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
               >
-                Đồng ý
+                {t("common.yes")}
               </button>
             </div>
           </div>

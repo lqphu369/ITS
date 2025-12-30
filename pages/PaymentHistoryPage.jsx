@@ -13,10 +13,22 @@ export const PaymentHistoryPage = () => {
 
   const getStatusBadge = (status) => {
     const badges = {
-      completed: { bg: "bg-green-100", text: "text-green-800" },
-      pending: { bg: "bg-yellow-100", text: "text-yellow-800" },
-      failed: { bg: "bg-red-100", text: "text-red-800" },
-      refunded: { bg: "bg-blue-100", text: "text-blue-800" },
+      completed: {
+        bg: "bg-green-100 dark:bg-green-900/30",
+        text: "text-green-800 dark:text-green-400",
+      },
+      pending: {
+        bg: "bg-yellow-100 dark:bg-yellow-900/30",
+        text: "text-yellow-800 dark:text-yellow-400",
+      },
+      failed: {
+        bg: "bg-red-100 dark:bg-red-900/30",
+        text: "text-red-800 dark:text-red-400",
+      },
+      refunded: {
+        bg: "bg-blue-100 dark:bg-blue-900/30",
+        text: "text-blue-800 dark:text-blue-400",
+      },
     };
     const badge = badges[status] || badges.pending;
     return badge;
@@ -33,39 +45,41 @@ export const PaymentHistoryPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 pb-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-12">
       <div className="max-w-6xl mx-auto px-4">
         <div className="flex items-center gap-3 mb-8">
-          <History className="w-8 h-8 text-blue-600" />
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+          <History className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
             {t("paymentHistory.title")}
           </h1>
         </div>
 
         {!user ? (
-          <div className="bg-white rounded-lg shadow p-8 text-center">
-            <p className="text-gray-500 text-lg">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+            <p className="text-gray-500 dark:text-gray-400 text-lg">
               {t("paymentHistory.loginRequired")}
             </p>
           </div>
         ) : userPayments.length === 0 ? (
-          <div className="bg-white rounded-lg shadow p-8 text-center">
-            <History className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">{t("paymentHistory.empty")}</p>
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+            <History className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+            <p className="text-gray-500 dark:text-gray-400 text-lg">
+              {t("paymentHistory.empty")}
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
             {userPayments.map((payment) => (
               <div
                 key={payment.id}
-                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
+                className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow p-6"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="font-bold text-lg text-gray-900">
+                    <h3 className="font-bold text-lg text-gray-900 dark:text-white">
                       #{payment.id}
                     </h3>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                       📅{" "}
                       {new Date(payment.paymentDate).toLocaleDateString(
                         "vi-VN",
@@ -91,29 +105,29 @@ export const PaymentHistoryPage = () => {
                 </div>
 
                 {/* Payment Details */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 pb-4 border-b border-gray-200">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                       {t("paymentHistory.paymentMethod")}
                     </p>
-                    <p className="font-medium text-gray-900 capitalize">
+                    <p className="font-medium text-gray-900 dark:text-white capitalize">
                       {payment.paymentMethod.replace("_", " ")}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                       {t("cart.vehicleCount")}
                     </p>
-                    <p className="font-medium text-gray-900">
+                    <p className="font-medium text-gray-900 dark:text-white">
                       {payment.cartItems.length}{" "}
                       {t("paymentHistory.vehicleCount")}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
                       {t("cart.total")}
                     </p>
-                    <p className="font-bold text-lg text-blue-600">
+                    <p className="font-bold text-lg text-blue-600 dark:text-blue-400">
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",
                         currency: "VND",
@@ -125,16 +139,16 @@ export const PaymentHistoryPage = () => {
                 {/* Items */}
                 {payment.cartItems.length > 0 && (
                   <div className="mb-4">
-                    <p className="text-sm font-medium text-gray-700 mb-3">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                       {t("paymentHistory.details")}
                     </p>
-                    <div className="space-y-2 bg-gray-50 p-3 rounded">
+                    <div className="space-y-2 bg-gray-50 dark:bg-gray-900 p-3 rounded">
                       {payment.cartItems.map((item, idx) => (
                         <div key={idx} className="flex justify-between text-sm">
-                          <span className="text-gray-700">
+                          <span className="text-gray-700 dark:text-gray-300">
                             {item.vehicleName} ({item.days} {t("cart.days")})
                           </span>
-                          <span className="font-medium text-gray-900">
+                          <span className="font-medium text-gray-900 dark:text-white">
                             {new Intl.NumberFormat("vi-VN", {
                               style: "currency",
                               currency: "VND",
@@ -148,14 +162,14 @@ export const PaymentHistoryPage = () => {
 
                 {/* Notes */}
                 {payment.notes && (
-                  <p className="text-sm text-gray-600 italic mb-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 italic mb-4">
                     📝 {payment.notes}
                   </p>
                 )}
 
                 {/* Actions */}
-                <div className="flex gap-2 pt-4 border-t border-gray-200">
-                  <button className="flex-1 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 font-medium text-sm transition-colors flex items-center justify-center gap-2">
+                <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <button className="flex-1 px-4 py-2 border border-blue-600 dark:border-blue-500 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 font-medium text-sm transition-colors flex items-center justify-center gap-2">
                     <Download className="w-4 h-4" />
                     {t("paymentHistory.download")}
                   </button>

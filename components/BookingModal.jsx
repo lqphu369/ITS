@@ -117,25 +117,25 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black bg-opacity-50 backdrop-blur-sm">
-      <div className="bg-white rounded-xl sm:rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col animate-fade-in-up">
-        <div className="p-3 sm:p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50 sticky top-0 z-10">
-          <h3 className="font-bold text-base sm:text-lg text-gray-800">
+      <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] flex flex-col animate-fade-in-up">
+        <div className="p-3 sm:p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900 sticky top-0 z-10">
+          <h3 className="font-bold text-base sm:text-lg text-gray-800 dark:text-white">
             Xác nhận đặt xe
           </h3>
           <button
             onClick={onClose}
-            className="p-1 hover:bg-gray-200 rounded-full transition-colors"
+            className="p-1 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full transition-colors"
           >
-            <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
+            <X className="w-4 h-4 sm:w-5 sm:h-5 text-gray-500 dark:text-gray-400" />
           </button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           {/* Error Message */}
           {error && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-red-800">{error}</p>
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-2">
+              <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-red-800 dark:text-red-400">{error}</p>
             </div>
           )}
 
@@ -146,10 +146,10 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
               className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover flex-shrink-0"
             />
             <div className="min-w-0 flex-1">
-              <h4 className="font-bold text-sm sm:text-base text-gray-900 truncate">
+              <h4 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white truncate">
                 {vehicle.name}
               </h4>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1 flex items-center gap-1">
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center gap-1">
                 <MapPin className="w-3 h-3" />
                 {vehicle.address}
               </p>
@@ -161,7 +161,7 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Start Date */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   <Calendar className="w-4 h-4 inline mr-1" />
                   Ngày nhận xe
                 </label>
@@ -179,13 +179,13 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
                       setEndDate(nextDay.toISOString().split("T")[0]);
                     }
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
               </div>
 
               {/* Start Time */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   <Clock className="w-4 h-4 inline mr-1" />
                   Giờ nhận xe
                 </label>
@@ -193,7 +193,7 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
                   type="time"
                   value={startTime}
                   onChange={(e) => setStartTime(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
               </div>
 

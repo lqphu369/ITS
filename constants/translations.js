@@ -19,6 +19,14 @@ export const translations = {
     "common.loading": "Đang tải...",
     "common.error": "Lỗi",
     "common.success": "Thành công",
+    "common.yes": "Đồng ý",
+    "common.no": "Không",
+    "common.confirmLogout": "Xác nhận đăng xuất",
+    "common.confirmLogoutMessage": "Bạn có chắc sẽ đăng xuất không?",
+
+    // Theme
+    "theme.light": "Chế độ sáng",
+    "theme.dark": "Chế độ tối",
 
     // Navigation
     "nav.home": "Trang chủ",
@@ -355,6 +363,14 @@ export const translations = {
     "common.loading": "Loading...",
     "common.error": "Error",
     "common.success": "Success",
+    "common.yes": "Yes",
+    "common.no": "No",
+    "common.confirmLogout": "Confirm Logout",
+    "common.confirmLogoutMessage": "Are you sure you want to logout?",
+
+    // Theme
+    "theme.light": "Light Mode",
+    "theme.dark": "Dark Mode",
 
     // Navigation
     "nav.home": "Home",

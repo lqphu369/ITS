@@ -98,15 +98,15 @@ export const ProfilePage = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-20 pb-12">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <AlertCircle className="w-16 h-16 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
             {t("profile.loginRequired")}
           </h2>
           <button
             onClick={() => navigate("/login")}
-            className="text-blue-600 hover:text-blue-700 font-medium"
+            className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
           >
             {t("profile.loginNow")}
           </button>
@@ -116,21 +116,23 @@ export const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 pb-12">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20 pb-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
             {t("profile.title")}
           </h1>
-          <p className="text-gray-600">{t("profile.subtitle")}</p>
+          <p className="text-gray-600 dark:text-gray-300">
+            {t("profile.subtitle")}
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column - Avatar & Documents */}
           <div className="lg:col-span-1 space-y-6">
             {/* Avatar Card */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
               <div className="text-center">
                 <div className="relative inline-block mb-4">
                   <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-4xl font-bold">
@@ -146,7 +148,7 @@ export const ProfilePage = () => {
                   </div>
                   <label
                     htmlFor="avatar-upload"
-                    className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition-colors shadow-lg"
+                    className="absolute bottom-0 right-0 bg-blue-600 dark:bg-blue-500 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors shadow-lg"
                   >
                     <Camera className="w-4 h-4" />
                     <input
@@ -158,15 +160,19 @@ export const ProfilePage = () => {
                     />
                   </label>
                 </div>
-                <h2 className="text-xl font-bold text-gray-900">{user.name}</h2>
-                <p className="text-sm text-gray-600">{user.email}</p>
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                  {user.name}
+                </h2>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {user.email}
+                </p>
                 <div className="mt-4">
                   <span
                     className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                       documents.idCard.verified &&
                       documents.driverLicense.verified
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
+                        ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400"
+                        : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400"
                     }`}
                   >
                     {documents.idCard.verified &&
@@ -187,38 +193,38 @@ export const ProfilePage = () => {
             </div>
 
             {/* Verification Status */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <Shield className="w-5 h-5 text-blue-600" />
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+              <h3 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <Shield className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                 {t("profile.verificationStatus")}
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
                     {t("profile.idCard")}
                   </span>
                   {documents.idCard.uploaded ? (
                     documents.idCard.verified ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-green-500 dark:text-green-400" />
                     ) : (
-                      <AlertCircle className="w-5 h-5 text-yellow-500" />
+                      <AlertCircle className="w-5 h-5 text-yellow-500 dark:text-yellow-400" />
                     )
                   ) : (
-                    <X className="w-5 h-5 text-gray-400" />
+                    <X className="w-5 h-5 text-gray-400 dark:text-gray-600" />
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
                     {t("profile.driverLicense")}
                   </span>
                   {documents.driverLicense.uploaded ? (
                     documents.driverLicense.verified ? (
-                      <CheckCircle className="w-5 h-5 text-green-500" />
+                      <CheckCircle className="w-5 h-5 text-green-500 dark:text-green-400" />
                     ) : (
-                      <AlertCircle className="w-5 h-5 text-yellow-500" />
+                      <AlertCircle className="w-5 h-5 text-yellow-500 dark:text-yellow-400" />
                     )
                   ) : (
-                    <X className="w-5 h-5 text-gray-400" />
+                    <X className="w-5 h-5 text-gray-400 dark:text-gray-600" />
                   )}
                 </div>
               </div>
@@ -228,15 +234,15 @@ export const ProfilePage = () => {
           {/* Right Column - Information & Documents */}
           <div className="lg:col-span-2 space-y-6">
             {/* Personal Information */}
-            <div className="bg-white rounded-xl shadow-sm p-6">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-6">
-                <h3 className="font-bold text-xl text-gray-900">
+                <h3 className="font-bold text-xl text-gray-900 dark:text-white">
                   {t("profile.personalInfo")}
                 </h3>
                 {!isEditing ? (
                   <button
                     onClick={() => setIsEditing(true)}
-                    className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
+                    className="flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
                   >
                     <Edit2 className="w-4 h-4" />
                     {t("profile.edit")}
@@ -245,14 +251,14 @@ export const ProfilePage = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setIsEditing(false)}
-                      className="flex items-center gap-2 text-gray-600 hover:text-gray-700 font-medium"
+                      className="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200 font-medium"
                     >
                       <X className="w-4 h-4" />
                       {t("profile.cancel")}
                     </button>
                     <button
                       onClick={handleSaveProfile}
-                      className="flex items-center gap-2 text-green-600 hover:text-green-700 font-medium"
+                      className="flex items-center gap-2 text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 font-medium"
                     >
                       <Save className="w-4 h-4" />
                       {t("profile.save")}
@@ -263,7 +269,7 @@ export const ProfilePage = () => {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <User className="w-4 h-4 inline mr-2" />
                     {t("profile.name")}
                   </label>
@@ -273,12 +279,12 @@ export const ProfilePage = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-600"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 dark:disabled:bg-gray-900 disabled:text-gray-600 dark:disabled:text-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <Mail className="w-4 h-4 inline mr-2" />
                     {t("profile.email")}
                   </label>
@@ -288,12 +294,12 @@ export const ProfilePage = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     disabled={!isEditing}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-600"
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 dark:disabled:bg-gray-900 disabled:text-gray-600 dark:disabled:text-gray-400 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     <Phone className="w-4 h-4 inline mr-2" />
                     {t("profile.phone")}
                   </label>
