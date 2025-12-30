@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Map,
@@ -21,6 +21,7 @@ export const Navbar = () => {
   const { user, isAdmin, logout, isAuthenticated } = useAuth();
   const { t } = useLanguage();
   const { getTotalItems } = useCart();
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const isActive = (path) => {
     return location.pathname === path
@@ -29,7 +30,12 @@ export const Navbar = () => {
   };
 
   const handleLogout = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  const confirmLogout = () => {
     logout();
+    setShowLogoutConfirm(false);
     navigate("/login");
   };
 
@@ -92,7 +98,7 @@ export const Navbar = () => {
                 <Link
                   to="/cart"
                   className="relative p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
-                  title="Giỏ hàng"
+                  title={t("nav.cart")}
                 >
                   <ShoppingCart className="w-5 h-5" />
                   {getTotalItems() > 0 && (
@@ -106,7 +112,7 @@ export const Navbar = () => {
                 <Link
                   to="/payment-history"
                   className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
-                  title="Lịch sử thanh toán"
+                  title={t("nav.paymentHistory")}
                 >
                   <History className="w-5 h-5" />
                 </Link>
@@ -115,7 +121,7 @@ export const Navbar = () => {
                 <Link
                   to="/profile"
                   className="p-2 text-gray-600 hover:text-blue-600 hover:bg-gray-100 rounded-lg transition-colors"
-                  title="Hồ sơ"
+                  title={t("nav.profile")}
                 >
                   <UserCircle className="w-5 h-5" />
                 </Link>
@@ -191,6 +197,34 @@ export const Navbar = () => {
           )}
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-xl p-6 w-full max-w-sm mx-4 animate-fade-in-up">
+            <h3 className="text-lg font-bold text-gray-900 mb-2">
+              Xác nhận đăng xuất
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Bạn có chắc sẽ đăng xuất không?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowLogoutConfirm(false)}
+                className="flex-1 px-4 py-2 border-2 border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors"
+              >
+                Không
+              </button>
+              <button
+                onClick={confirmLogout}
+                className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium transition-colors"
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

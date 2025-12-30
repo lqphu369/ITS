@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import { useLanguage } from "../contexts/LanguageContext.jsx";
 import { useNavigate } from "react-router-dom";
 import {
   User,
@@ -20,6 +21,7 @@ import {
 
 export const ProfilePage = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -61,7 +63,7 @@ export const ProfilePage = () => {
   const handleSaveProfile = () => {
     // In real app, this would call an API
     setIsEditing(false);
-    alert("Thông tin đã được cập nhật!");
+    alert(t("profile.updateSuccess"));
   };
 
   const handleFileUpload = (docType, event) => {
@@ -78,7 +80,7 @@ export const ProfilePage = () => {
           verified: docType !== "avatar" ? false : undefined,
         },
       });
-      alert(`${file.name} đã được upload thành công!`);
+      alert(`${file.name} ${t("profile.uploadSuccess")}`);
     }
   };
 
@@ -100,13 +102,13 @@ export const ProfilePage = () => {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <AlertCircle className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
-            Vui lòng đăng nhập
+            {t("profile.loginRequired")}
           </h2>
           <button
             onClick={() => navigate("/login")}
             className="text-blue-600 hover:text-blue-700 font-medium"
           >
-            Đăng nhập ngay →
+            {t("profile.loginNow")}
           </button>
         </div>
       </div>
@@ -119,11 +121,9 @@ export const ProfilePage = () => {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Hồ sơ cá nhân
+            {t("profile.title")}
           </h1>
-          <p className="text-gray-600">
-            Quản lý thông tin và giấy tờ xác minh của bạn
-          </p>
+          <p className="text-gray-600">{t("profile.subtitle")}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -173,12 +173,12 @@ export const ProfilePage = () => {
                     documents.driverLicense.verified ? (
                       <>
                         <CheckCircle className="w-4 h-4 mr-1" />
-                        Đã xác minh
+                        {t("profile.verified")}
                       </>
                     ) : (
                       <>
                         <AlertCircle className="w-4 h-4 mr-1" />
-                        Chưa xác minh
+                        {t("profile.notVerified")}
                       </>
                     )}
                   </span>
@@ -190,11 +190,13 @@ export const ProfilePage = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Shield className="w-5 h-5 text-blue-600" />
-                Trạng thái xác minh
+                {t("profile.verificationStatus")}
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">CCCD/CMND</span>
+                  <span className="text-sm text-gray-600">
+                    {t("profile.idCard")}
+                  </span>
                   {documents.idCard.uploaded ? (
                     documents.idCard.verified ? (
                       <CheckCircle className="w-5 h-5 text-green-500" />
@@ -206,7 +208,9 @@ export const ProfilePage = () => {
                   )}
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">Bằng lái xe</span>
+                  <span className="text-sm text-gray-600">
+                    {t("profile.driverLicense")}
+                  </span>
                   {documents.driverLicense.uploaded ? (
                     documents.driverLicense.verified ? (
                       <CheckCircle className="w-5 h-5 text-green-500" />
@@ -227,7 +231,7 @@ export const ProfilePage = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="font-bold text-xl text-gray-900">
-                  Thông tin cá nhân
+                  {t("profile.personalInfo")}
                 </h3>
                 {!isEditing ? (
                   <button
@@ -235,7 +239,7 @@ export const ProfilePage = () => {
                     className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium"
                   >
                     <Edit2 className="w-4 h-4" />
-                    Chỉnh sửa
+                    {t("profile.edit")}
                   </button>
                 ) : (
                   <div className="flex gap-2">
@@ -244,14 +248,14 @@ export const ProfilePage = () => {
                       className="flex items-center gap-2 text-gray-600 hover:text-gray-700 font-medium"
                     >
                       <X className="w-4 h-4" />
-                      Hủy
+                      {t("profile.cancel")}
                     </button>
                     <button
                       onClick={handleSaveProfile}
                       className="flex items-center gap-2 text-green-600 hover:text-green-700 font-medium"
                     >
                       <Save className="w-4 h-4" />
-                      Lưu
+                      {t("profile.save")}
                     </button>
                   </div>
                 )}
@@ -261,7 +265,7 @@ export const ProfilePage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <User className="w-4 h-4 inline mr-2" />
-                    Họ và tên
+                    {t("profile.name")}
                   </label>
                   <input
                     type="text"
@@ -276,7 +280,7 @@ export const ProfilePage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <Mail className="w-4 h-4 inline mr-2" />
-                    Email
+                    {t("profile.email")}
                   </label>
                   <input
                     type="email"
@@ -291,7 +295,7 @@ export const ProfilePage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <Phone className="w-4 h-4 inline mr-2" />
-                    Số điện thoại
+                    {t("profile.phone")}
                   </label>
                   <input
                     type="tel"
@@ -306,7 +310,7 @@ export const ProfilePage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <Calendar className="w-4 h-4 inline mr-2" />
-                    Ngày sinh
+                    {t("profile.dateOfBirth")}
                   </label>
                   <input
                     type="date"
@@ -321,7 +325,7 @@ export const ProfilePage = () => {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     <MapPin className="w-4 h-4 inline mr-2" />
-                    Địa chỉ
+                    {t("profile.address")}
                   </label>
                   <input
                     type="text"
@@ -338,11 +342,10 @@ export const ProfilePage = () => {
             {/* Documents Upload */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="font-bold text-xl text-gray-900 mb-2">
-                Giấy tờ xác minh
+                {t("profile.documents")}
               </h3>
               <p className="text-sm text-gray-600 mb-6">
-                Upload CCCD/CMND và Bằng lái xe để xác minh tài khoản và được
-                thuê xe
+                {t("profile.documentsDesc")}
               </p>
 
               <div className="space-y-6">
@@ -356,7 +359,7 @@ export const ProfilePage = () => {
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900 mb-1">
-                        CCCD/CMND
+                        {t("profile.idCard")}
                       </h4>
                       {documents.idCard.uploaded ? (
                         <div className="space-y-2">
@@ -373,8 +376,8 @@ export const ProfilePage = () => {
                                 }`}
                               >
                                 {documents.idCard.verified
-                                  ? "✓ Đã xác minh"
-                                  : "⏳ Đang chờ xác minh"}
+                                  ? t("profile.verifiedDoc")
+                                  : t("profile.pendingVerification")}
                               </span>
                             </div>
                             <button
@@ -395,14 +398,14 @@ export const ProfilePage = () => {
                       ) : (
                         <div>
                           <p className="text-sm text-gray-600 mb-3">
-                            Upload ảnh 2 mặt CCCD/CMND
+                            {t("profile.uploadIdCard")}
                           </p>
                           <label
                             htmlFor="id-card-upload"
                             className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
                           >
                             <Upload className="w-4 h-4" />
-                            Chọn file
+                            {t("profile.chooseFile")}
                             <input
                               id="id-card-upload"
                               type="file"
@@ -427,7 +430,7 @@ export const ProfilePage = () => {
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-gray-900 mb-1">
-                        Bằng lái xe
+                        {t("profile.driverLicense")}
                       </h4>
                       {documents.driverLicense.uploaded ? (
                         <div className="space-y-2">
@@ -444,8 +447,8 @@ export const ProfilePage = () => {
                                 }`}
                               >
                                 {documents.driverLicense.verified
-                                  ? "✓ Đã xác minh"
-                                  : "⏳ Đang chờ xác minh"}
+                                  ? t("profile.verifiedDoc")
+                                  : t("profile.pendingVerification")}
                               </span>
                             </div>
                             <button
@@ -466,14 +469,14 @@ export const ProfilePage = () => {
                       ) : (
                         <div>
                           <p className="text-sm text-gray-600 mb-3">
-                            Upload ảnh 2 mặt Bằng lái xe (A1/A2)
+                            {t("profile.uploadDriverLicense")}
                           </p>
                           <label
                             htmlFor="driver-license-upload"
                             className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors cursor-pointer"
                           >
                             <Upload className="w-4 h-4" />
-                            Chọn file
+                            {t("profile.chooseFile")}
                             <input
                               id="driver-license-upload"
                               type="file"
@@ -495,11 +498,13 @@ export const ProfilePage = () => {
                 <div className="flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
                   <div className="text-sm text-yellow-800">
-                    <p className="font-semibold mb-1">Lưu ý:</p>
+                    <p className="font-semibold mb-1">
+                      {t("profile.noteTitle")}
+                    </p>
                     <ul className="list-disc list-inside space-y-1 text-xs">
-                      <li>Ảnh rõ ràng, không bị mờ hoặc che khuất</li>
-                      <li>Định dạng: JPG, PNG, PDF (tối đa 5MB)</li>
-                      <li>Thời gian xác minh: 24-48 giờ làm việc</li>
+                      <li>{t("profile.note1")}</li>
+                      <li>{t("profile.note2")}</li>
+                      <li>{t("profile.note3")}</li>
                     </ul>
                   </div>
                 </div>

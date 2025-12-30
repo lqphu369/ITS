@@ -26,6 +26,40 @@ export const CartProvider = ({ children }) => {
     });
   }, []);
 
+  // Check if a vehicle is already booked during a specific time period
+  const checkBookingConflict = useCallback(
+    (vehicleId, startDate, endDate) => {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      // Check cart items for conflicts
+      const hasConflict = cartItems.some((item) => {
+        if (item.vehicleId !== vehicleId) return false;
+
+        const itemStart = new Date(item.startDate);
+        const itemEnd = new Date(item.endDate);
+
+        // Check if dates overlap
+        return (
+          (start >= itemStart && start <= itemEnd) ||
+          (end >= itemStart && end <= itemEnd) ||
+          (start <= itemStart && end >= itemEnd)
+        );
+      });
+
+      if (hasConflict) {
+        return {
+          hasConflict: true,
+          message:
+            "Xe này đã được đặt trong khoảng thời gian bạn chọn. Vui lòng chọn thời gian khác.",
+        };
+      }
+
+      return { hasConflict: false };
+    },
+    [cartItems]
+  );
+
   const removeFromCart = useCallback((itemId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
   }, []);
@@ -51,6 +85,7 @@ export const CartProvider = ({ children }) => {
         clearCart,
         getTotalPrice,
         getTotalItems,
+        checkBookingConflict,
       }}
     >
       {children}

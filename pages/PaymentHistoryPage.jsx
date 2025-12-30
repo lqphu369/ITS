@@ -24,10 +24,10 @@ export const PaymentHistoryPage = () => {
 
   const getStatusLabel = (status) => {
     const labels = {
-      completed: "Đã hoàn thành",
-      pending: "Đang chờ",
-      failed: "Thất bại",
-      refunded: "Đã hoàn tiền",
+      completed: t("paymentHistory.status.completed"),
+      pending: t("paymentHistory.status.pending"),
+      failed: t("paymentHistory.status.failed"),
+      refunded: t("paymentHistory.status.refunded"),
     };
     return labels[status] || status;
   };
@@ -38,22 +38,20 @@ export const PaymentHistoryPage = () => {
         <div className="flex items-center gap-3 mb-8">
           <History className="w-8 h-8 text-blue-600" />
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
-            Lịch sử thanh toán
+            {t("paymentHistory.title")}
           </h1>
         </div>
 
         {!user ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
             <p className="text-gray-500 text-lg">
-              Vui lòng đăng nhập để xem lịch sử thanh toán
+              {t("paymentHistory.loginRequired")}
             </p>
           </div>
         ) : userPayments.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
             <History className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">
-              Chưa có lịch sử thanh toán nào
-            </p>
+            <p className="text-gray-500 text-lg">{t("paymentHistory.empty")}</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -96,20 +94,25 @@ export const PaymentHistoryPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4 pb-4 border-b border-gray-200">
                   <div>
                     <p className="text-xs text-gray-500 mb-1">
-                      Phương thức thanh toán
+                      {t("paymentHistory.paymentMethod")}
                     </p>
                     <p className="font-medium text-gray-900 capitalize">
                       {payment.paymentMethod.replace("_", " ")}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Số xe</p>
+                    <p className="text-xs text-gray-500 mb-1">
+                      {t("cart.vehicleCount")}
+                    </p>
                     <p className="font-medium text-gray-900">
-                      {payment.cartItems.length} xe
+                      {payment.cartItems.length}{" "}
+                      {t("paymentHistory.vehicleCount")}
                     </p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 mb-1">Tổng cộng</p>
+                    <p className="text-xs text-gray-500 mb-1">
+                      {t("cart.total")}
+                    </p>
                     <p className="font-bold text-lg text-blue-600">
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",
@@ -123,13 +126,13 @@ export const PaymentHistoryPage = () => {
                 {payment.cartItems.length > 0 && (
                   <div className="mb-4">
                     <p className="text-sm font-medium text-gray-700 mb-3">
-                      Chi tiết:
+                      {t("paymentHistory.details")}
                     </p>
                     <div className="space-y-2 bg-gray-50 p-3 rounded">
                       {payment.cartItems.map((item, idx) => (
                         <div key={idx} className="flex justify-between text-sm">
                           <span className="text-gray-700">
-                            {item.vehicleName} ({item.days} ngày)
+                            {item.vehicleName} ({item.days} {t("cart.days")})
                           </span>
                           <span className="font-medium text-gray-900">
                             {new Intl.NumberFormat("vi-VN", {
@@ -154,7 +157,7 @@ export const PaymentHistoryPage = () => {
                 <div className="flex gap-2 pt-4 border-t border-gray-200">
                   <button className="flex-1 px-4 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 font-medium text-sm transition-colors flex items-center justify-center gap-2">
                     <Download className="w-4 h-4" />
-                    Tải hóa đơn
+                    {t("paymentHistory.download")}
                   </button>
                 </div>
               </div>

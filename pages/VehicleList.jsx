@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { VehicleCard } from "../components/VehicleCard.jsx";
 import { MapComponent } from "../components/MapComponent.jsx";
 import { BookingModal } from "../components/BookingModal.jsx";
@@ -11,6 +11,8 @@ import {
   Map,
   X,
   SlidersHorizontal,
+  Navigation,
+  MapPin,
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext.jsx";
 
@@ -27,6 +29,15 @@ export const VehicleList = () => {
   const [bookingVehicle, setBookingVehicle] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  const [loadingLocation, setLoadingLocation] = useState(false);
+  const [showRoute, setShowRoute] = useState(false);
+  const [sortByDistance, setSortByDistance] = useState(false);
+  const [routingDistances, setRoutingDistances] = useState({});
+  const [calculatingRoutes, setCalculatingRoutes] = useState(false);
+  const [addressInput, setAddressInput] = useState("");
+  const [searchingAddress, setSearchingAddress] = useState(false);
+  const [showAddressInput, setShowAddressInput] = useState(false);
 
   // Get unique values for filters
   const brands = useMemo(() => {
@@ -44,8 +55,133 @@ export const VehicleList = () => {
     return ["All", ...uniqueSeats.sort((a, b) => a - b)];
   }, []);
 
+  // Get user location
+  const getUserLocation = () => {
+    setLoadingLocation(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+          setLoadingLocation(false);
+          setSortByDistance(true);
+          setShowMap(true);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          // Fallback to default location
+          setUserLocation({
+            lat: 10.7769,
+            lng: 106.7009,
+          });
+          setLoadingLocation(false);
+          alert(t("vehicleList.locationError"));
+        }
+      );
+    } else {
+      alert(t("vehicleList.locationNotSupported"));
+      setLoadingLocation(false);
+    }
+  };
+
+  // Geocode address to coordinates using Nominatim API
+  const searchAddressLocation = async () => {
+    if (!addressInput.trim()) {
+      alert(t("vehicleList.enterAddress"));
+      return;
+    }
+
+    setSearchingAddress(true);
+    try {
+      const response = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          addressInput + ", Vietnam"
+        )}&limit=1`
+      );
+      const data = await response.json();
+
+      if (data && data.length > 0) {
+        const location = {
+          lat: parseFloat(data[0].lat),
+          lng: parseFloat(data[0].lon),
+        };
+        setUserLocation(location);
+        setSortByDistance(true);
+        setShowMap(true);
+        setShowAddressInput(false);
+        setSearchingAddress(false);
+      } else {
+        alert(t("vehicleList.addressNotFound"));
+        setSearchingAddress(false);
+      }
+    } catch (error) {
+      console.error("Error geocoding address:", error);
+      alert(t("vehicleList.addressError"));
+      setSearchingAddress(false);
+    }
+  };
+
+  // Calculate routing distance using OSRM API
+  const calculateRoutingDistance = async (lat1, lon1, lat2, lon2) => {
+    try {
+      const response = await fetch(
+        `https://router.project-osrm.org/route/v1/driving/${lon1},${lat1};${lon2},${lat2}?overview=false`
+      );
+      const data = await response.json();
+      if (data.code === "Ok" && data.routes && data.routes.length > 0) {
+        // Return distance in kilometers
+        return data.routes[0].distance / 1000;
+      }
+      // Fallback to straight line distance if routing fails
+      return calculateStraightLineDistance(lat1, lon1, lat2, lon2);
+    } catch (error) {
+      console.error("Error calculating route:", error);
+      // Fallback to straight line distance
+      return calculateStraightLineDistance(lat1, lon1, lat2, lon2);
+    }
+  };
+
+  // Calculate straight line distance as fallback
+  const calculateStraightLineDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Radius of Earth in km
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  // Calculate routing distances for all vehicles when user location is set
+  useEffect(() => {
+    if (userLocation && sortByDistance) {
+      setCalculatingRoutes(true);
+      const calculateAllDistances = async () => {
+        const distances = {};
+        for (const vehicle of MOCK_VEHICLES) {
+          const distance = await calculateRoutingDistance(
+            userLocation.lat,
+            userLocation.lng,
+            vehicle.location.lat,
+            vehicle.location.lng
+          );
+          distances[vehicle.id] = distance;
+        }
+        setRoutingDistances(distances);
+        setCalculatingRoutes(false);
+      };
+      calculateAllDistances();
+    }
+  }, [userLocation, sortByDistance]);
+
   const filteredVehicles = useMemo(() => {
-    return MOCK_VEHICLES.filter((v) => {
+    let vehicles = MOCK_VEHICLES.filter((v) => {
       const matchesType = selectedType === "All" || v.type === selectedType;
       const matchesSearch =
         v.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -65,6 +201,22 @@ export const VehicleList = () => {
         matchesPrice
       );
     });
+
+    // Sort by routing distance if enabled and distances are calculated
+    if (
+      sortByDistance &&
+      userLocation &&
+      Object.keys(routingDistances).length > 0
+    ) {
+      vehicles = vehicles
+        .map((v) => ({
+          ...v,
+          distance: routingDistances[v.id] || 999, // Use routing distance or put at end if not calculated
+        }))
+        .sort((a, b) => a.distance - b.distance);
+    }
+
+    return vehicles;
   }, [
     selectedType,
     searchQuery,
@@ -72,7 +224,23 @@ export const VehicleList = () => {
     selectedSeats,
     selectedArea,
     priceRange,
+    sortByDistance,
+    userLocation,
+    routingDistances,
   ]);
+
+  // Find nearest vehicle
+  const nearestVehicle = useMemo(() => {
+    if (!userLocation || filteredVehicles.length === 0) return null;
+    return filteredVehicles[0]; // Already sorted if sortByDistance is true
+  }, [userLocation, filteredVehicles]);
+
+  // Show route to nearest vehicle automatically when found
+  useEffect(() => {
+    if (nearestVehicle && userLocation) {
+      setShowRoute(true);
+    }
+  }, [nearestVehicle, userLocation]);
 
   const handleBook = (vehicle) => {
     setBookingVehicle(vehicle);
@@ -130,13 +298,48 @@ export const VehicleList = () => {
               <SlidersHorizontal className="w-5 h-5" />
               {hasActiveFilters && (
                 <span className="hidden sm:inline text-sm font-medium">
-                  Lọc (
+                  {t("vehicleList.filterActive")} (
                   {(selectedBrand !== "All" ? 1 : 0) +
                     (selectedSeats !== "All" ? 1 : 0) +
                     (selectedArea !== "All" ? 1 : 0)}
                   )
                 </span>
               )}
+            </button>
+
+            {/* Find Nearest Vehicle Button */}
+            <button
+              onClick={getUserLocation}
+              disabled={loadingLocation}
+              className={`p-2 rounded-lg transition-colors flex items-center gap-2 ${
+                loadingLocation
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-green-600 text-white hover:bg-green-700"
+              }`}
+              title={t("vehicleList.findNearby")}
+            >
+              <Navigation className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm font-medium">
+                {loadingLocation
+                  ? t("vehicleList.finding")
+                  : t("vehicleList.findNearby")}
+              </span>
+            </button>
+
+            {/* Address Search Toggle */}
+            <button
+              onClick={() => setShowAddressInput(!showAddressInput)}
+              className={`p-2 rounded-lg transition-colors flex items-center gap-2 ${
+                showAddressInput
+                  ? "bg-purple-600 text-white"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+              title={t("vehicleList.searchAddress")}
+            >
+              <MapPin className="w-5 h-5" />
+              <span className="hidden sm:inline text-sm font-medium">
+                {t("vehicleList.searchAddress")}
+              </span>
             </button>
 
             {/* Mobile Map Toggle */}
@@ -149,18 +352,56 @@ export const VehicleList = () => {
             </button>
           </div>
 
+          {/* Address Input Panel */}
+          {showAddressInput && (
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 animate-fade-in">
+              <div className="flex items-center gap-2">
+                <div className="relative flex-1">
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-500 w-5 h-5" />
+                  <input
+                    type="text"
+                    placeholder={t("vehicleList.addressPlaceholder")}
+                    className="w-full pl-10 pr-4 py-2 text-sm border border-purple-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                    value={addressInput}
+                    onChange={(e) => setAddressInput(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        searchAddressLocation();
+                      }
+                    }}
+                  />
+                </div>
+                <button
+                  onClick={searchAddressLocation}
+                  disabled={searchingAddress}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                    searchingAddress
+                      ? "bg-purple-300 text-purple-700 cursor-not-allowed"
+                      : "bg-purple-600 text-white hover:bg-purple-700"
+                  }`}
+                >
+                  {searchingAddress
+                    ? t("vehicleList.searching")
+                    : t("common.search")}
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Advanced Filters Panel */}
           {showAdvancedFilters && (
             <div className="bg-gray-50 rounded-lg p-4 space-y-4 animate-fade-in">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-gray-900">Bộ lọc nâng cao</h3>
+                <h3 className="font-semibold text-gray-900">
+                  {t("vehicleList.advancedFilters")}
+                </h3>
                 {hasActiveFilters && (
                   <button
                     onClick={clearAllFilters}
                     className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
                   >
                     <X className="w-4 h-4" />
-                    Xóa bộ lọc
+                    {t("vehicleList.clearFilters")}
                   </button>
                 )}
               </div>
@@ -169,7 +410,7 @@ export const VehicleList = () => {
                 {/* Brand Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Hãng xe
+                    {t("vehicleList.brand")}
                   </label>
                   <select
                     value={selectedBrand}
@@ -178,7 +419,7 @@ export const VehicleList = () => {
                   >
                     {brands.map((brand) => (
                       <option key={brand} value={brand}>
-                        {brand === "All" ? "Tất cả" : brand}
+                        {brand === "All" ? t("vehicleList.filterAll") : brand}
                       </option>
                     ))}
                   </select>
@@ -187,7 +428,7 @@ export const VehicleList = () => {
                 {/* Seats Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Số chỗ
+                    {t("vehicleList.seats")}
                   </label>
                   <select
                     value={selectedSeats}
@@ -202,7 +443,9 @@ export const VehicleList = () => {
                   >
                     {seats.map((seat) => (
                       <option key={seat} value={seat}>
-                        {seat === "All" ? "Tất cả" : `${seat} chỗ`}
+                        {seat === "All"
+                          ? t("vehicleList.filterAll")
+                          : `${seat} ${t("vehicleList.seatsCount")}`}
                       </option>
                     ))}
                   </select>
@@ -211,7 +454,7 @@ export const VehicleList = () => {
                 {/* Area Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Khu vực
+                    {t("vehicleList.area")}
                   </label>
                   <select
                     value={selectedArea}
@@ -220,7 +463,7 @@ export const VehicleList = () => {
                   >
                     {areas.map((area) => (
                       <option key={area} value={area}>
-                        {area === "All" ? "Tất cả" : area}
+                        {area === "All" ? t("vehicleList.filterAll") : area}
                       </option>
                     ))}
                   </select>
@@ -229,7 +472,7 @@ export const VehicleList = () => {
                 {/* Price Range Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Giá (VNĐ/ngày)
+                    {t("vehicleList.price")}
                   </label>
                   <div className="flex items-center gap-2">
                     <input
@@ -320,6 +563,13 @@ export const VehicleList = () => {
               </span>
             </div>
 
+            {calculatingRoutes && (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-700"></div>
+                <span>{t("vehicleList.calculatingRoutes")}</span>
+              </div>
+            )}
+
             {filteredVehicles.length === 0 ? (
               <div className="text-center py-20 text-gray-500">
                 <AlertCircle className="w-12 h-12 mx-auto mb-2 text-gray-300" />
@@ -353,7 +603,46 @@ export const VehicleList = () => {
             vehicles={filteredVehicles}
             selectedVehicleId={selectedVehicleId}
             onSelectVehicle={setSelectedVehicleId}
+            userLocation={userLocation}
+            showRoute={showRoute && nearestVehicle}
+            nearestVehicle={nearestVehicle}
           />
+
+          {/* Nearest Vehicle Info Card */}
+          {nearestVehicle && userLocation && (
+            <div className="absolute top-4 left-4 right-4 bg-white p-4 rounded-lg shadow-lg z-10 animate-fade-in">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Navigation className="w-5 h-5 text-green-600" />
+                    <h3 className="font-semibold text-gray-900">Xe gần nhất</h3>
+                  </div>
+                  <p className="text-sm font-medium text-gray-700 mb-1">
+                    {nearestVehicle.name}
+                  </p>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <MapPin className="w-4 h-4" />
+                    <span>
+                      {nearestVehicle.distance
+                        ? `${nearestVehicle.distance.toFixed(2)} km`
+                        : "Đang tính..."}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowRoute(!showRoute)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                    showRoute
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {showRoute ? "Ẩn lộ trình" : "Hiện lộ trình"}
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Map Legend Overlay */}
           <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 bg-white p-2 sm:p-3 rounded-lg shadow-lg z-10 text-xs">
             <div className="flex items-center gap-1.5 sm:gap-2 mb-1">

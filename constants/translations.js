@@ -26,6 +26,9 @@ export const translations = {
     "nav.admin": "Admin",
     "nav.dashboard": "Dashboard",
     "nav.adminPortal": "Admin Portal",
+    "nav.cart": "Giỏ hàng",
+    "nav.paymentHistory": "Lịch sử thanh toán",
+    "nav.profile": "Hồ sơ",
 
     // Login
     "login.title": "Đăng nhập",
@@ -73,6 +76,9 @@ export const translations = {
     "register.error.generic": "Có lỗi xảy ra khi đăng ký",
 
     // Home
+    "home.banner.title": "CHO THUÊ XE MÁY MIXIRIDE",
+    "home.banner.subtitle": "Chuẩn bị cho những chuyến đi cùng MixiRide",
+    "home.banner.bookNow": "ĐẶT XE NGAY!",
     "home.hero.title": "Smart Mobility",
     "home.hero.subtitle": "for Smart Cities",
     "home.hero.description":
@@ -89,8 +95,83 @@ export const translations = {
     "home.features.verifiedFleet": "Đội xe được xác minh",
     "home.features.verifiedFleetDesc":
       "Tất cả phương tiện đều được giám sát và bảo trì thường xuyên. Bảng điều khiển quản trị đảm bảo chất lượng và an toàn của đội xe.",
+    "home.features.award": "Dịch vụ hàng đầu 2024",
+    "home.features.imageTitle": "Đội xe chất lượng cao",
+    "home.features.securityTitle": "Bảo mật 100%",
+    "home.features.securityDesc":
+      "Thông tin cá nhân của bạn được bảo vệ an toàn",
+
+    // Home - Hero Section
+    "home.hero.badge": "#1 Dịch vụ thuê xe tại Việt Nam",
+    "home.hero.title1": "Thuê xe máy",
+    "home.hero.title2": "Dễ dàng & Nhanh chóng",
+    "home.hero.description":
+      "Trải nghiệm dịch vụ thuê xe chất lượng cao với hơn 500+ phương tiện được xác minh. Đặt xe chỉ trong 2 phút với giá cả minh bạch và hỗ trợ 24/7.",
+    "home.hero.cta1": "Thuê xe ngay",
+    "home.hero.cta2": "Xem hướng dẫn",
+    "home.hero.trustedBy": "10,000+ khách hàng tin dùng",
+    "home.hero.available": "Có sẵn",
+    "home.hero.perDay": "ngày",
+    "home.hero.bookNow": "Đặt ngay",
+    "home.hero.activeVehicles": "Xe đang hoạt động",
+    "home.hero.reviews": "đánh giá",
+
+    // Home - Stats
+    "home.stats.customers": "Khách hàng",
+    "home.stats.vehicles": "Phương tiện",
+    "home.stats.rating": "Đánh giá",
+    "home.stats.support": "Hỗ trợ",
+
+    // Home - How It Works
+    "home.howItWorks.badge": "Cách thức hoạt động",
+    "home.howItWorks.title": "Đặt xe chỉ trong 3 bước",
+    "home.howItWorks.subtitle":
+      "Quy trình đơn giản, nhanh chóng và thuận tiện cho mọi chuyến đi của bạn",
+
+    // Home - Steps
+    "home.steps.step1Title": "Tìm xe gần bạn",
+    "home.steps.step1Desc":
+      "Sử dụng bản đồ để tìm xe máy gần vị trí của bạn với giá cả phù hợp",
+    "home.steps.step2Title": "Đặt xe online",
+    "home.steps.step2Desc":
+      "Chọn ngày thuê, xác nhận thông tin và thanh toán an toàn trực tuyến",
+    "home.steps.step3Title": "Nhận xe & Đi",
+    "home.steps.step3Desc":
+      "Đến địa điểm nhận xe, kiểm tra và bắt đầu hành trình của bạn",
+
+    // Home - Testimonials
+    "home.testimonials.badge": "Đánh giá từ khách hàng",
+    "home.testimonials.title": "Khách hàng nói gì về chúng tôi",
+    "home.testimonials.subtitle":
+      "Hơn 10,000 khách hàng đã tin tưởng và sử dụng dịch vụ của MixiRide",
+    "home.testimonials.role1": "Sinh viên ĐH Bách Khoa",
+    "home.testimonials.content1":
+      "Dịch vụ tuyệt vời! Xe mới, sạch sẽ và giá cả rất hợp lý. Tôi đã thuê nhiều lần và luôn hài lòng.",
+    "home.testimonials.role2": "Nhân viên văn phòng",
+    "home.testimonials.content2":
+      "App rất dễ sử dụng, đặt xe nhanh chóng. Hỗ trợ khách hàng nhiệt tình và chuyên nghiệp.",
+    "home.testimonials.role3": "Du khách từ Hà Nội",
+    "home.testimonials.content3":
+      "Lần đầu sử dụng MixiRide khi du lịch Sài Gòn. Rất tiện lợi và an toàn. Sẽ quay lại!",
+
+    // Home - CTA
+    "home.cta.title": "Sẵn sàng cho chuyến đi tiếp theo?",
+    "home.cta.subtitle":
+      "Đăng ký ngay hôm nay và nhận ưu đãi 20% cho lần thuê xe đầu tiên",
+    "home.cta.button1": "Thuê xe ngay",
+    "home.cta.button2": "Tạo tài khoản",
+
+    // Home - Footer
     "home.footer": "MixiRide - Ứng dụng hệ thống cho thuê phương tiện",
-    "home.footer.copyright": "© 2024 Group Project. All rights reserved.",
+    "home.footer.copyright": "© 2024 MixiRide. Tất cả quyền được bảo lưu.",
+    "home.footer.description":
+      "Nền tảng cho thuê xe máy hàng đầu Việt Nam. Kết nối hàng ngàn người dùng với các phương tiện chất lượng cao.",
+    "home.footer.contact": "Liên hệ",
+    "home.footer.quickLinks": "Liên kết nhanh",
+    "home.footer.about": "Về chúng tôi",
+    "home.footer.support": "Hỗ trợ",
+    "home.footer.privacy": "Chính sách bảo mật",
+    "home.footer.terms": "Điều khoản sử dụng",
 
     // Vehicle List
     "vehicleList.title": "Phương tiện có sẵn",
@@ -101,6 +182,27 @@ export const translations = {
     "vehicleList.results": "kết quả",
     "vehicleList.mapLegend.available": "Có sẵn",
     "vehicleList.mapLegend.unavailable": "Không có sẵn",
+    "vehicleList.advancedFilters": "Bộ lọc nâng cao",
+    "vehicleList.clearFilters": "Xóa bộ lọc",
+    "vehicleList.brand": "Hãng xe",
+    "vehicleList.seats": "Số chỗ",
+    "vehicleList.area": "Khu vực",
+    "vehicleList.price": "Giá (VNĐ/ngày)",
+    "vehicleList.seatsCount": "chỗ",
+    "vehicleList.findNearby": "Xe gần tôi",
+    "vehicleList.finding": "Đang tìm...",
+    "vehicleList.locationError":
+      "Không thể lấy vị trí của bạn. Sử dụng vị trí mặc định.",
+    "vehicleList.locationNotSupported": "Trình duyệt không hỗ trợ định vị.",
+    "vehicleList.filterActive": "Lọc",
+    "vehicleList.calculatingRoutes":
+      "Đang tính toán khoảng cách theo đường đi...",
+    "vehicleList.enterAddress": "Vui lòng nhập địa chỉ",
+    "vehicleList.addressNotFound": "Không tìm thấy địa chỉ. Vui lòng thử lại.",
+    "vehicleList.addressError": "Lỗi khi tìm kiếm địa chỉ. Vui lòng thử lại.",
+    "vehicleList.searchAddress": "Tìm theo địa chỉ",
+    "vehicleList.addressPlaceholder": "Nhập địa chỉ của bạn...",
+    "vehicleList.searching": "Đang tìm...",
 
     // Vehicle Card
     "vehicleCard.perDay": "/ngày",
@@ -110,6 +212,23 @@ export const translations = {
     "vehicleCard.rented": "Đã thuê",
     "vehicleCard.maintenance": "Bảo trì",
     "vehicleCard.highDemand": "Hot pick",
+    "vehicleCard.viewDetails": "Xem chi tiết",
+
+    // Cart
+    "cart.title": "Giỏ hàng",
+    "cart.empty": "Giỏ hàng trống",
+    "cart.emptyMessage": "Chưa có xe nào trong giỏ hàng",
+    "cart.items": "mục",
+    "cart.days": "ngày",
+    "cart.perDay": "/ngày",
+    "cart.total": "Tổng cộng",
+    "cart.remove": "Xóa khỏi giỏ hàng",
+    "cart.checkout": "Thanh toán",
+    "cart.processing": "Đang xử lý...",
+    "cart.summary": "Tóm tắt đơn hàng",
+    "cart.itemCount": "Số mục",
+    "cart.loginRequired": "Vui lòng đăng nhập để thanh toán",
+    "cart.paymentSuccess": "Thanh toán thành công!",
 
     // Booking Modal
     "booking.title": "Đặt xe",
@@ -121,6 +240,77 @@ export const translations = {
     "booking.cancel": "Hủy",
     "booking.success": "Đặt xe thành công!",
     "booking.successDesc": "Kiểm tra email của bạn để biết chi tiết.",
+
+    // Profile
+    "profile.title": "Hồ sơ cá nhân",
+    "profile.subtitle": "Quản lý thông tin và giấy tờ xác minh của bạn",
+    "profile.personalInfo": "Thông tin cá nhân",
+    "profile.edit": "Chỉnh sửa",
+    "profile.save": "Lưu",
+    "profile.cancel": "Hủy",
+    "profile.name": "Họ và tên",
+    "profile.email": "Email",
+    "profile.phone": "Số điện thoại",
+    "profile.dateOfBirth": "Ngày sinh",
+    "profile.address": "Địa chỉ",
+    "profile.verified": "Đã xác minh",
+    "profile.notVerified": "Chưa xác minh",
+    "profile.verificationStatus": "Trạng thái xác minh",
+    "profile.documents": "Giấy tờ xác minh",
+    "profile.documentsDesc":
+      "Upload CCCD/CMND và Bằng lái xe để xác minh tài khoản và được thuê xe",
+    "profile.idCard": "CCCD/CMND",
+    "profile.driverLicense": "Bằng lái xe",
+    "profile.uploadIdCard": "Upload ảnh 2 mặt CCCD/CMND",
+    "profile.uploadDriverLicense": "Upload ảnh 2 mặt Bằng lái xe (A1/A2)",
+    "profile.chooseFile": "Chọn file",
+    "profile.verifiedDoc": "✓ Đã xác minh",
+    "profile.pendingVerification": "⏳ Đang chờ xác minh",
+    "profile.uploadSuccess": "đã được upload thành công!",
+    "profile.updateSuccess": "Thông tin đã được cập nhật!",
+    "profile.noteTitle": "Lưu ý:",
+    "profile.note1": "Ảnh rõ ràng, không bị mờ hoặc che khuất",
+    "profile.note2": "Định dạng: JPG, PNG, PDF (tối đa 5MB)",
+    "profile.note3": "Thời gian xác minh: 24-48 giờ làm việc",
+    "profile.loginRequired": "Vui lòng đăng nhập",
+    "profile.loginNow": "Đăng nhập ngay →",
+
+    // Payment History
+    "paymentHistory.title": "Lịch sử thanh toán",
+    "paymentHistory.loginRequired":
+      "Vui lòng đăng nhập để xem lịch sử thanh toán",
+    "paymentHistory.empty": "Chưa có lịch sử thanh toán nào",
+    "paymentHistory.paymentMethod": "Phương thức thanh toán",
+    "paymentHistory.vehicleCount": "xe",
+    "paymentHistory.details": "Chi tiết:",
+    "paymentHistory.download": "Tải hóa đơn",
+    "paymentHistory.status.completed": "Đã hoàn thành",
+    "paymentHistory.status.pending": "Đang chờ",
+    "paymentHistory.status.failed": "Thất bại",
+    "paymentHistory.status.refunded": "Đã hoàn tiền",
+
+    // Order Tracking
+    "orderTracking.title": "Theo dõi đơn hàng",
+    "orderTracking.subtitle":
+      "Xem chi tiết và trạng thái các đơn thuê xe của bạn",
+    "orderTracking.searchPlaceholder": "Tìm kiếm theo mã đơn hoặc tên xe...",
+    "orderTracking.allStatus": "Tất cả trạng thái",
+    "orderTracking.noOrders": "Không tìm thấy đơn hàng",
+    "orderTracking.changeFilter": "Thử thay đổi bộ lọc để xem kết quả khác",
+    "orderTracking.noOrdersYet": "Bạn chưa có đơn thuê xe nào",
+    "orderTracking.rentNow": "Thuê xe ngay",
+    "orderTracking.orderStatus": "Trạng thái đơn hàng",
+    "orderTracking.showDetails": "Xem chi tiết",
+    "orderTracking.hideDetails": "Ẩn chi tiết",
+    "orderTracking.notes": "Ghi chú",
+    "orderTracking.step.confirmed": "Đơn hàng đã xác nhận",
+    "orderTracking.step.preparing": "Đang chuẩn bị xe",
+    "orderTracking.step.ready": "Xe đã sẵn sàng",
+    "orderTracking.step.inProgress": "Đang thuê",
+    "orderTracking.step.completed": "Hoàn thành",
+    "orderTracking.paymentMethod.creditCard": "Thẻ tín dụng",
+    "orderTracking.paymentMethod.bankTransfer": "Chuyển khoản",
+    "orderTracking.total": "Tổng:",
 
     // Admin Dashboard
     "admin.dashboard.title": "Admin Dashboard",
@@ -172,6 +362,9 @@ export const translations = {
     "nav.admin": "Admin",
     "nav.dashboard": "Dashboard",
     "nav.adminPortal": "Admin Portal",
+    "nav.cart": "Shopping Cart",
+    "nav.paymentHistory": "Payment History",
+    "nav.profile": "Profile",
 
     // Login
     "login.title": "Login",
@@ -221,6 +414,9 @@ export const translations = {
     "register.error.generic": "An error occurred during registration",
 
     // Home
+    "home.banner.title": "MOTORBIKE RENTAL MIXIRIDE",
+    "home.banner.subtitle": "Get ready for your rides with MixiRide",
+    "home.banner.bookNow": "BOOK NOW!",
     "home.hero.title": "Smart Mobility",
     "home.hero.subtitle": "for Smart Cities",
     "home.hero.description":
@@ -237,8 +433,82 @@ export const translations = {
     "home.features.verifiedFleet": "Verified Fleet",
     "home.features.verifiedFleetDesc":
       "All vehicles are monitored and maintained regularly. Admin dashboard ensures fleet quality and safety.",
+    "home.features.award": "Top Service 2024",
+    "home.features.imageTitle": "High Quality Fleet",
+    "home.features.securityTitle": "100% Secure",
+    "home.features.securityDesc":
+      "Your personal information is safely protected",
+
+    // Home - Hero Section
+    "home.hero.badge": "#1 Motorbike Rental Service in Vietnam",
+    "home.hero.title1": "Rent Motorbikes",
+    "home.hero.title2": "Easy & Fast",
+    "home.hero.description":
+      "Experience premium motorbike rental service with 500+ verified vehicles. Book in just 2 minutes with transparent pricing and 24/7 support.",
+    "home.hero.cta1": "Rent Now",
+    "home.hero.cta2": "Watch Demo",
+    "home.hero.trustedBy": "Trusted by 10,000+ customers",
+    "home.hero.available": "Available",
+    "home.hero.perDay": "day",
+    "home.hero.bookNow": "Book Now",
+    "home.hero.activeVehicles": "Active Vehicles",
+    "home.hero.reviews": "reviews",
+
+    // Home - Stats
+    "home.stats.customers": "Customers",
+    "home.stats.vehicles": "Vehicles",
+    "home.stats.rating": "Rating",
+    "home.stats.support": "Support",
+
+    // Home - How It Works
+    "home.howItWorks.badge": "How It Works",
+    "home.howItWorks.title": "Book in Just 3 Steps",
+    "home.howItWorks.subtitle":
+      "Simple, fast and convenient process for all your trips",
+
+    // Home - Steps
+    "home.steps.step1Title": "Find Nearby Vehicles",
+    "home.steps.step1Desc":
+      "Use the map to find motorbikes near your location with suitable prices",
+    "home.steps.step2Title": "Book Online",
+    "home.steps.step2Desc":
+      "Select rental dates, confirm details and pay securely online",
+    "home.steps.step3Title": "Pick Up & Go",
+    "home.steps.step3Desc":
+      "Go to pickup location, inspect and start your journey",
+
+    // Home - Testimonials
+    "home.testimonials.badge": "Customer Reviews",
+    "home.testimonials.title": "What Our Customers Say",
+    "home.testimonials.subtitle":
+      "Over 10,000 customers have trusted and used MixiRide services",
+    "home.testimonials.role1": "Student at Bach Khoa University",
+    "home.testimonials.content1":
+      "Excellent service! New, clean vehicles and very reasonable prices. I've rented many times and always satisfied.",
+    "home.testimonials.role2": "Office Worker",
+    "home.testimonials.content2":
+      "Very easy-to-use app, quick booking. Enthusiastic and professional customer support.",
+    "home.testimonials.role3": "Tourist from Hanoi",
+    "home.testimonials.content3":
+      "First time using MixiRide while traveling in Saigon. Very convenient and safe. Will come back!",
+
+    // Home - CTA
+    "home.cta.title": "Ready for Your Next Trip?",
+    "home.cta.subtitle": "Sign up today and get 20% off your first rental",
+    "home.cta.button1": "Rent Now",
+    "home.cta.button2": "Create Account",
+
+    // Home - Footer
     "home.footer": "MixiRide - Vehicle Rental System Application",
-    "home.footer.copyright": "© 2024 Group Project. All rights reserved.",
+    "home.footer.copyright": "© 2024 MixiRide. All rights reserved.",
+    "home.footer.description":
+      "Vietnam's leading motorbike rental platform. Connecting thousands of users with high-quality vehicles.",
+    "home.footer.contact": "Contact",
+    "home.footer.quickLinks": "Quick Links",
+    "home.footer.about": "About Us",
+    "home.footer.support": "Support",
+    "home.footer.privacy": "Privacy Policy",
+    "home.footer.terms": "Terms of Service",
 
     // Vehicle List
     "vehicleList.title": "Available Vehicles",
@@ -248,6 +518,26 @@ export const translations = {
     "vehicleList.results": "results",
     "vehicleList.mapLegend.available": "Available",
     "vehicleList.mapLegend.unavailable": "Unavailable",
+    "vehicleList.advancedFilters": "Advanced Filters",
+    "vehicleList.clearFilters": "Clear Filters",
+    "vehicleList.brand": "Brand",
+    "vehicleList.seats": "Seats",
+    "vehicleList.area": "Area",
+    "vehicleList.price": "Price (VND/day)",
+    "vehicleList.seatsCount": "seats",
+    "vehicleList.findNearby": "Near Me",
+    "vehicleList.finding": "Finding...",
+    "vehicleList.locationError":
+      "Cannot get your location. Using default location.",
+    "vehicleList.locationNotSupported": "Browser does not support geolocation.",
+    "vehicleList.filterActive": "Filter",
+    "vehicleList.calculatingRoutes": "Calculating route distances...",
+    "vehicleList.enterAddress": "Please enter an address",
+    "vehicleList.addressNotFound": "Address not found. Please try again.",
+    "vehicleList.addressError": "Error searching address. Please try again.",
+    "vehicleList.searchAddress": "Search by Address",
+    "vehicleList.addressPlaceholder": "Enter your address...",
+    "vehicleList.searching": "Searching...",
 
     // Vehicle Card
     "vehicleCard.perDay": "/day",
@@ -257,6 +547,23 @@ export const translations = {
     "vehicleCard.rented": "Rented",
     "vehicleCard.maintenance": "Maintenance",
     "vehicleCard.highDemand": "Hot pick",
+    "vehicleCard.viewDetails": "View Details",
+
+    // Cart
+    "cart.title": "Shopping Cart",
+    "cart.empty": "Cart Empty",
+    "cart.emptyMessage": "No vehicles in cart",
+    "cart.items": "items",
+    "cart.days": "days",
+    "cart.perDay": "/day",
+    "cart.total": "Total",
+    "cart.remove": "Remove from cart",
+    "cart.checkout": "Checkout",
+    "cart.processing": "Processing...",
+    "cart.summary": "Order Summary",
+    "cart.itemCount": "Item count",
+    "cart.loginRequired": "Please login to checkout",
+    "cart.paymentSuccess": "Payment successful!",
 
     // Booking Modal
     "booking.title": "Book Vehicle",
@@ -268,6 +575,78 @@ export const translations = {
     "booking.cancel": "Cancel",
     "booking.success": "Booking Confirmed!",
     "booking.successDesc": "Check your email for details.",
+
+    // Profile
+    "profile.title": "User Profile",
+    "profile.subtitle": "Manage your information and verification documents",
+    "profile.personalInfo": "Personal Information",
+    "profile.edit": "Edit",
+    "profile.save": "Save",
+    "profile.cancel": "Cancel",
+    "profile.name": "Full Name",
+    "profile.email": "Email",
+    "profile.phone": "Phone Number",
+    "profile.dateOfBirth": "Date of Birth",
+    "profile.address": "Address",
+    "profile.verified": "Verified",
+    "profile.notVerified": "Not Verified",
+    "profile.verificationStatus": "Verification Status",
+    "profile.documents": "Verification Documents",
+    "profile.documentsDesc":
+      "Upload ID Card and Driver License to verify account and rent vehicles",
+    "profile.idCard": "ID Card",
+    "profile.driverLicense": "Driver License",
+    "profile.uploadIdCard": "Upload both sides of ID Card",
+    "profile.uploadDriverLicense":
+      "Upload both sides of Driver License (A1/A2)",
+    "profile.chooseFile": "Choose file",
+    "profile.verifiedDoc": "✓ Verified",
+    "profile.pendingVerification": "⏳ Pending verification",
+    "profile.uploadSuccess": "uploaded successfully!",
+    "profile.updateSuccess": "Information updated successfully!",
+    "profile.noteTitle": "Note:",
+    "profile.note1": "Clear images, not blurred or obscured",
+    "profile.note2": "Format: JPG, PNG, PDF (max 5MB)",
+    "profile.note3": "Verification time: 24-48 working hours",
+    "profile.loginRequired": "Please login",
+    "profile.loginNow": "Login now →",
+
+    // Payment History
+    "paymentHistory.title": "Payment History",
+    "paymentHistory.loginRequired": "Please login to view payment history",
+    "paymentHistory.empty": "No payment history",
+    "paymentHistory.paymentMethod": "Payment Method",
+    "paymentHistory.vehicleCount": "vehicles",
+    "paymentHistory.details": "Details:",
+    "paymentHistory.download": "Download Invoice",
+    "paymentHistory.status.completed": "Completed",
+    "paymentHistory.status.pending": "Pending",
+    "paymentHistory.status.failed": "Failed",
+    "paymentHistory.status.refunded": "Refunded",
+
+    // Order Tracking
+    "orderTracking.title": "Order Tracking",
+    "orderTracking.subtitle": "View details and status of your vehicle rentals",
+    "orderTracking.searchPlaceholder":
+      "Search by order number or vehicle name...",
+    "orderTracking.allStatus": "All Status",
+    "orderTracking.noOrders": "No orders found",
+    "orderTracking.changeFilter":
+      "Try changing the filter to see other results",
+    "orderTracking.noOrdersYet": "You don't have any rental orders yet",
+    "orderTracking.rentNow": "Rent now",
+    "orderTracking.orderStatus": "Order Status",
+    "orderTracking.showDetails": "Show details",
+    "orderTracking.hideDetails": "Hide details",
+    "orderTracking.notes": "Notes",
+    "orderTracking.step.confirmed": "Order confirmed",
+    "orderTracking.step.preparing": "Preparing vehicle",
+    "orderTracking.step.ready": "Vehicle ready",
+    "orderTracking.step.inProgress": "In Progress",
+    "orderTracking.step.completed": "Completed",
+    "orderTracking.paymentMethod.creditCard": "Credit Card",
+    "orderTracking.paymentMethod.bankTransfer": "Bank Transfer",
+    "orderTracking.total": "Total:",
 
     // Admin Dashboard
     "admin.dashboard.title": "Admin Dashboard",

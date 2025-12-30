@@ -37,7 +37,7 @@ export const CartPage = () => {
       addPayment(payment);
       clearCart();
       setIsProcessing(false);
-      alert("Thanh toán thành công! (Payment successful!)");
+      alert(t("cart.paymentSuccess"));
     }, 2000);
   };
 
@@ -48,17 +48,15 @@ export const CartPage = () => {
           <ShoppingCart className="w-8 h-8 text-blue-600" />
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
             {cartItems.length === 0
-              ? "Giỏ hàng trống"
-              : `Giỏ hàng (${cartItems.length} mục)`}
+              ? t("cart.empty")
+              : `${t("cart.title")} (${cartItems.length} ${t("cart.items")})`}
           </h1>
         </div>
 
         {cartItems.length === 0 ? (
           <div className="bg-white rounded-lg shadow p-8 text-center">
             <ShoppingCart className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 text-lg">
-              Chưa có xe nào trong giỏ hàng
-            </p>
+            <p className="text-gray-500 text-lg">{t("cart.emptyMessage")}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -85,13 +83,15 @@ export const CartPage = () => {
                           {new Date(item.startDate).toLocaleDateString("vi-VN")}{" "}
                           - {new Date(item.endDate).toLocaleDateString("vi-VN")}
                         </p>
-                        <p>⏱️ {item.days} ngày</p>
+                        <p>
+                          ⏱️ {item.days} {t("cart.days")}
+                        </p>
                         <p className="text-blue-600 font-semibold">
                           {new Intl.NumberFormat("vi-VN", {
                             style: "currency",
                             currency: "VND",
                           }).format(item.pricePerDay)}
-                          /ngày
+                          {t("cart.perDay")}
                         </p>
                       </div>
                     </div>
@@ -99,12 +99,14 @@ export const CartPage = () => {
                       <button
                         onClick={() => handleRemoveItem(item.id)}
                         className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                        title="Xóa khỏi giỏ hàng"
+                        title={t("cart.remove")}
                       >
                         <Trash2 className="w-5 h-5" />
                       </button>
                       <div className="text-right">
-                        <p className="text-sm text-gray-500">Tổng cộng</p>
+                        <p className="text-sm text-gray-500">
+                          {t("cart.total")}
+                        </p>
                         <p className="text-lg font-bold text-blue-600">
                           {new Intl.NumberFormat("vi-VN", {
                             style: "currency",
@@ -122,16 +124,16 @@ export const CartPage = () => {
             <div className="lg:col-span-1">
               <div className="bg-white rounded-lg shadow sticky top-20 p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-6">
-                  Tóm tắt đơn hàng
+                  {t("cart.summary")}
                 </h2>
 
                 <div className="space-y-4 mb-6 pb-6 border-b border-gray-200">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Số mục</span>
+                    <span className="text-gray-600">{t("cart.itemCount")}</span>
                     <span className="font-medium">{cartItems.length}</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold">
-                    <span className="text-gray-900">Tổng cộng</span>
+                    <span className="text-gray-900">{t("cart.total")}</span>
                     <span className="text-blue-600">
                       {new Intl.NumberFormat("vi-VN", {
                         style: "currency",
@@ -151,12 +153,12 @@ export const CartPage = () => {
                   }`}
                 >
                   <CreditCard className="w-5 h-5" />
-                  {isProcessing ? "Đang xử lý..." : "Thanh toán"}
+                  {isProcessing ? t("cart.processing") : t("cart.checkout")}
                 </button>
 
                 {!user && (
                   <p className="text-xs text-red-500 mt-3 text-center">
-                    Vui lòng đăng nhập để thanh toán
+                    {t("cart.loginRequired")}
                   </p>
                 )}
               </div>

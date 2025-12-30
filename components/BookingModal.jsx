@@ -7,6 +7,7 @@ import {
   ShoppingCart,
   Clock,
   MapPin,
+  AlertCircle,
 } from "lucide-react";
 import { useCart } from "../contexts/CartContext.jsx";
 
@@ -21,7 +22,8 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
   const [pickupLocation, setPickupLocation] = useState(vehicle?.address || "");
   const [loading, setLoading] = useState(false);
   const [addedToCart, setAddedToCart] = useState(false);
-  const { addToCart } = useCart();
+  const [error, setError] = useState("");
+  const { addToCart, checkBookingConflict } = useCart();
 
   if (!vehicle) return null;
 
@@ -67,6 +69,13 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
   const total = pricePerDay * days;
 
   const handleBook = () => {
+    // Check for booking conflicts
+    const conflict = checkBookingConflict(vehicle.id, startDate, endDate);
+    if (conflict.hasConflict) {
+      setError(conflict.message);
+      return;
+    }
+
     setLoading(true);
     // Simulate API call
     setTimeout(() => {
@@ -76,6 +85,13 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
   };
 
   const handleAddToCart = () => {
+    // Check for booking conflicts
+    const conflict = checkBookingConflict(vehicle.id, startDate, endDate);
+    if (conflict.hasConflict) {
+      setError(conflict.message);
+      return;
+    }
+
     const cartItem = {
       id: `${vehicle.id}_${Date.now()}`,
       vehicleId: vehicle.id,
@@ -115,6 +131,14 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-red-800">{error}</p>
+            </div>
+          )}
+
           <div className="flex gap-3 sm:gap-4 mb-4 sm:mb-6">
             <img
               src={vehicle.imageUrl}
@@ -147,6 +171,7 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
                   min={today}
                   onChange={(e) => {
                     setStartDate(e.target.value);
+                    setError(""); // Clear error when date changes
                     // Ensure end date is after start date
                     if (e.target.value > endDate) {
                       const nextDay = new Date(e.target.value);
@@ -182,7 +207,10 @@ export const BookingModal = ({ vehicle, onClose, onConfirm }) => {
                   type="date"
                   value={endDate}
                   min={startDate}
-                  onChange={(e) => setEndDate(e.target.value)}
+                  onChange={(e) => {
+                    setEndDate(e.target.value);
+                    setError(""); // Clear error when date changes
+                  }}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
               </div>
